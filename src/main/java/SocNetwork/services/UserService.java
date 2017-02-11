@@ -6,6 +6,7 @@ import SocNetwork.models.User;
 /**
  * Created by aleksei on 11.02.17.
  */
+
 public interface UserService {
 
     Iterable<User> getAllUsers();
