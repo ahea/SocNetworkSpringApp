@@ -47,7 +47,7 @@ public class User {
     private boolean online;
 
     @Relationship(type="USER_ROLE", direction=Relationship.UNDIRECTED)
-    Collection<Role> roles;
+    private Collection<Role> roles;
 
     @Relationship(type="HAS_IN_FRIENDLIST", direction=Relationship.UNDIRECTED)
     private Collection<User> friendList;
@@ -55,4 +55,107 @@ public class User {
     @Relationship(type="HAS_IN_BLACKLIST", direction=Relationship.OUTGOING)
     private Collection<User> blackList;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email){
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getPhotoLink() {
+        return photoLink;
+    }
+
+    public void setPhotoLink(String photoLink) {
+        this.photoLink = photoLink;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
+
+    public Collection<User> getBlackList() {
+        return blackList;
+    }
+
+    public void setBlackList(Collection<User> blackList) {
+        this.blackList = blackList;
+    }
+
+    public Collection<User> getFriendList() {
+        return friendList;
+    }
+
+    public void setFriendList(Collection<User> friendList) {
+        this.friendList = friendList;
+    }
 }
