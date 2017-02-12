@@ -2,9 +2,11 @@ package SocNetwork.controllers;
 
 import SocNetwork.exceptions.EmailExistsException;
 import SocNetwork.models.User;
+import SocNetwork.models.enums.ServerResponse;
 import SocNetwork.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,14 +26,10 @@ public class UserController {
     }
 
     @RequestMapping(value="/api/register", method=RequestMethod.POST)
-    public String register(@RequestBody User user) throws EmailExistsException{
-            userService.saveUser(user);
-        return "Registration successful";
-    }
-
-    @ExceptionHandler
-    void handleEmailExistsException(EmailExistsException e, HttpServletResponse response) throws IOException {
-        response.sendError(HttpStatus.BAD_REQUEST.value());
+    public ResponseEntity<ServerResponse> register(@RequestBody User user) throws EmailExistsException{
+        userService.saveUser(user);
+        return new ResponseEntity<ServerResponse>(ServerResponse.USER_CREATED,
+                HttpStatus.OK);
     }
 
 }
