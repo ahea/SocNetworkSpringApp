@@ -46,10 +46,10 @@ public class User {
     @Property
     private boolean online;
 
-    @Relationship(type="USER_ROLE", direction=Relationship.UNDIRECTED)
+    @Relationship(type="HAS_ROLE", direction=Relationship.OUTGOING)
     private Collection<Role> roles;
 
-    @Relationship(type="HAS_IN_FRIENDLIST", direction=Relationship.UNDIRECTED)
+    @Relationship(type="HAS_IN_FRIENDLIST", direction=Relationship.OUTGOING)
     private Collection<User> friendList;
 
     @Relationship(type="HAS_IN_BLACKLIST", direction=Relationship.OUTGOING)
