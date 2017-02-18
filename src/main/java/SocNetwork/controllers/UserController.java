@@ -25,11 +25,21 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value="/api/register", method=RequestMethod.POST)
+    @RequestMapping(value = "/api/register", method = RequestMethod.POST)
     public ResponseEntity<ServerResponse> register(@RequestBody User user) throws EmailExistsException{
         userService.saveUser(user);
         return new ResponseEntity<ServerResponse>(ServerResponse.USER_CREATED,
                 HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/secured", method = RequestMethod.GET)
+    public String checkSecured(){
+        return "Authorization is ok";
+    }
+
+    @RequestMapping(value = "/api/free", method = RequestMethod.GET)
+    public String checkFree(){
+        return "Free from authorization";
     }
 
 }
