@@ -46,7 +46,10 @@ public class OAuth2Configuration {
         public void configure(HttpSecurity http) throws Exception {
             // @formatter:off
             http
-                    .anonymous().disable()
+                    .authorizeRequests().antMatchers("/api/register").permitAll()
+                    .and()
+                    .authorizeRequests().antMatchers("/api/free").permitAll()
+                    .and()
                     .authorizeRequests().anyRequest().authenticated();
             // @formatter:on
         }

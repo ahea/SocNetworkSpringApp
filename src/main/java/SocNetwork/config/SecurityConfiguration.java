@@ -23,7 +23,6 @@ import org.springframework.security.web.authentication.preauth.RequestHeaderAuth
 
 @Configuration
 @EnableWebSecurity
-@Order(1)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -33,15 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http
-                .authorizeRequests().antMatchers("/api/register").permitAll()
-                .and()
-                .authorizeRequests().antMatchers("/api/free").permitAll()
-                .and()
-                .authorizeRequests().antMatchers("/oauth/token").permitAll()
-                .and()
-                .authorizeRequests().antMatchers("/api/secured").hasRole("USER")
-                .and()
-                .authorizeRequests().anyRequest().authenticated();
+                .authorizeRequests().antMatchers("/api/secured").hasRole("USER");
     }
 
     @Override
