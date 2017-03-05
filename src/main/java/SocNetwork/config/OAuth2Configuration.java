@@ -50,6 +50,8 @@ public class OAuth2Configuration {
                     .and()
                     .authorizeRequests().antMatchers("/api/free").permitAll()
                     .and()
+                    .authorizeRequests().regexMatchers("/api/profile/\\d*").permitAll()
+                    .and()
                     .authorizeRequests().anyRequest().authenticated();
             // @formatter:on
         }

@@ -1,6 +1,7 @@
 package SocNetwork.services;
 
 import SocNetwork.exceptions.EmailExistsException;
+import SocNetwork.exceptions.UserNotFoundException;
 import SocNetwork.models.Role;
 import SocNetwork.models.User;
 import SocNetwork.repositories.RoleRepository;
@@ -47,8 +48,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByIdHidePassword(Long id) throws UserNotFoundException {
+        User user = userRepository.findOne(id);
+        if (user == null) throw new UserNotFoundException("User not found");
+        user.setPassword(null);
+        return user;
+    }
+
+    @Override
     public User getUserByEmail(String email){
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public  User getUserByEmailHidePassword(String email){
+        User user = userRepository.findByEmail(email);
+        user.setPassword(null);
+        return user;
     }
 
     @Override
