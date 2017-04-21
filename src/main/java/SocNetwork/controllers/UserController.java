@@ -7,8 +7,11 @@ import SocNetwork.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -20,9 +23,16 @@ public class UserController {
 
     private UserService userService;
 
+    private TokenStore tokenStore;
+
     @Autowired
     public void setUserService(UserService userService){
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setTokenStore(TokenStore tokenStore){
+        this.tokenStore = tokenStore;
     }
 
     @RequestMapping(value = "/api/register", method = RequestMethod.POST)
@@ -30,6 +40,16 @@ public class UserController {
         userService.saveUser(user);
         return new ResponseEntity<ServerResponse>(ServerResponse.USER_CREATED,
                 HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/logout", method = RequestMethod.GET)
+    public void logout(HttpServletRequest request){
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null){
+            String tokenValue = authHeader.replace("Bearer", "").trim();
+            OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
+            tokenStore.removeAccessToken(accessToken);
+        }
     }
 
     @RequestMapping(value = "/api/secured", method = RequestMethod.GET)
