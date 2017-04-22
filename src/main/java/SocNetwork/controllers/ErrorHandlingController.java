@@ -1,6 +1,7 @@
 package SocNetwork.controllers;
 
 import SocNetwork.exceptions.EmailExistsException;
+import SocNetwork.exceptions.UserNotFoundException;
 import SocNetwork.models.enums.ServerResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,12 @@ public class ErrorHandlingController {
             EmailExistsException e){
         return new ResponseEntity<ServerResponse>(ServerResponse.EMAIL_EXISTS,
                 HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ServerResponse> handleNullPointerException(UserNotFoundException e){
+        return new ResponseEntity<ServerResponse>(ServerResponse.USER_NOT_FOUND,
+                HttpStatus.NOT_FOUND);
     }
 
 }

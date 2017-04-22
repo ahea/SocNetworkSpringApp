@@ -32,7 +32,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http
-                .authorizeRequests().antMatchers("/api/secured").hasRole("USER");
+                .authorizeRequests().antMatchers("/api/secured").hasRole("USER")
+                .and()
+                .authorizeRequests().antMatchers("/api/profile/me").hasRole("USER");
     }
 
     @Override

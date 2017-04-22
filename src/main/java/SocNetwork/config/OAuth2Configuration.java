@@ -50,6 +50,8 @@ public class OAuth2Configuration {
                     .and()
                     .authorizeRequests().antMatchers("/api/free").permitAll()
                     .and()
+                    .authorizeRequests().regexMatchers("/api/profile/\\d*").permitAll()
+                    .and()
                     .authorizeRequests().anyRequest().authenticated();
             // @formatter:on
         }
@@ -61,7 +63,13 @@ public class OAuth2Configuration {
     protected static class AuthorizationServerConfiguration extends
             AuthorizationServerConfigurerAdapter {
 
-        private TokenStore tokenStore = new InMemoryTokenStore();
+        @Autowired
+        private TokenStore tokenStore;
+
+        @Bean
+        public TokenStore tokenStore() {
+            return new InMemoryTokenStore();
+        }
 
         @Autowired
         @Qualifier("authenticationManagerBean")
@@ -92,8 +100,8 @@ public class OAuth2Configuration {
                     .scopes("read", "write")
                     .resourceIds(RESOURCE_ID)
                     .secret("clientsecret")
-                    .accessTokenValiditySeconds(1200)
-                    .refreshTokenValiditySeconds(3600);
+                    .accessTokenValiditySeconds(60 * 60 * 24 * 21)
+                    .refreshTokenValiditySeconds(60 * 60 * 24 * 30);
             // @formatter:on
         }
 

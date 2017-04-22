@@ -5,5 +5,6 @@ package SocNetwork.models.enums;
  */
 public enum ServerResponse {
     EMAIL_EXISTS,
-    USER_CREATED
+    USER_CREATED,
+    USER_NOT_FOUND
 }
