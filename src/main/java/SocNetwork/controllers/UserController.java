@@ -36,9 +36,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/register", method = RequestMethod.POST)
-    public ResponseEntity<ServerResponse> register(@RequestBody User user) throws EmailExistsException{
+    public ResponseEntity<Integer> register(@RequestBody User user) throws EmailExistsException{
         userService.saveUser(user);
-        return new ResponseEntity<>(ServerResponse.USER_CREATED, HttpStatus.OK);
+        return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/api/logout", method = RequestMethod.GET)

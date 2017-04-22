@@ -4,7 +4,10 @@ package SocNetwork.models.enums;
  * Created by aleksei on 12.02.17.
  */
 public enum ServerResponse {
+    SUCCESS,
     EMAIL_EXISTS,
-    USER_CREATED,
-    USER_NOT_FOUND
+    INCORRECT_DATA,
+    INCORRECT_PASSWORD,
+    USER_NOT_FOUND,
+    ACCESS_DENIED
 }

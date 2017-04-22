@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -65,6 +64,8 @@ public class OAuth2Configuration {
 
         @Autowired
         private TokenStore tokenStore;
+        private AuthenticationManager authenticationManager;
+        private UserDetailsServiceImpl userDetailsService;
 
         @Bean
         public TokenStore tokenStore() {
@@ -73,10 +74,14 @@ public class OAuth2Configuration {
 
         @Autowired
         @Qualifier("authenticationManagerBean")
-        private AuthenticationManager authenticationManager;
+        public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+            this.authenticationManager = authenticationManager;
+        }
 
         @Autowired
-        private UserDetailsServiceImpl userDetailsService;
+        public void setUserDetailsService(UserDetailsServiceImpl userDetailsService) {
+            this.userDetailsService = userDetailsService;
+        }
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints)
