@@ -8,6 +8,6 @@ import org.springframework.data.neo4j.repository.GraphRepository;
  */
 public interface RoleRepository extends GraphRepository<Role> {
 
-    public Role findByName(String name);
+    Role findByName(String name);
 
 }

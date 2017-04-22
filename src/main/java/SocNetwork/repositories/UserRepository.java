@@ -8,6 +8,6 @@ import org.springframework.data.neo4j.repository.GraphRepository;
  */
 public interface UserRepository extends GraphRepository<User> {
 
-    public User findByEmail(String email);
+    User findByEmail(String email);
 
 }

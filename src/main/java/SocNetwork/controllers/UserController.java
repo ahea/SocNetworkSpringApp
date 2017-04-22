@@ -26,12 +26,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/register", method = RequestMethod.POST)
-    public ResponseEntity<ServerResponse> register(@RequestBody User user) {
-        try {
-            userService.saveUser(user);
-        } catch (EmailExistsException e) {
-            return new ResponseEntity<>(ServerResponse.EMAIL_EXISTS, HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<ServerResponse> register(@RequestBody User user) throws EmailExistsException{
+        userService.saveUser(user);
         return new ResponseEntity<>(ServerResponse.USER_CREATED, HttpStatus.OK);
     }
 
