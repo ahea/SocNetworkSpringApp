@@ -46,6 +46,8 @@ public class User {
     @Property
     private boolean online;
 
+    private Collection<UserHasLanguage> hasLanguage;
+
     @Relationship(type="HAS_ROLE", direction=Relationship.OUTGOING)
     private Collection<Role> roles;
 
@@ -133,6 +135,14 @@ public class User {
 
     public void setOnline(boolean online) {
         this.online = online;
+    }
+
+    public Collection<UserHasLanguage> getHasLanguage() {
+        return hasLanguage;
+    }
+
+    public void setHasLanguage(Collection<UserHasLanguage> hasLanguage) {
+        this.hasLanguage = hasLanguage;
     }
 
     public Collection<Role> getRoles() {
