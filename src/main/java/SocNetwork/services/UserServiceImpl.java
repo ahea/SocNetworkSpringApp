@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Created by aleksei on 11.02.17.
@@ -75,6 +77,18 @@ public class UserServiceImpl implements UserService {
         user.setRoles(Arrays.asList(role));
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
+    }
+
+    @Override
+    public void addToFriendList (User whoAdds, User whoIsAdded)
+            throws UserNotFoundException{
+        if (whoIsAdded == null) throw new UserNotFoundException("User not found");
+        Collection<User> friendList = whoAdds.getFriendList();
+        if (friendList == null)
+            friendList = new ArrayList<>();
+        friendList.add(whoIsAdded);
+        whoAdds.setFriendList(friendList);
+        userRepository.save(whoAdds);
     }
 
     @Override

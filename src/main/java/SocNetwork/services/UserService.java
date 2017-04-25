@@ -22,6 +22,8 @@ public interface UserService {
 
     void saveUser(User user) throws EmailExistsException;
 
+    void addToFriendList(User whoAdds, User whoIsAdded) throws UserNotFoundException;
+
     void deleteUserById(Long id);
 
     void deleteUser(User user);

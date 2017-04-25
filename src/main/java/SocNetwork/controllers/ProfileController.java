@@ -2,8 +2,11 @@ package SocNetwork.controllers;
 
 import SocNetwork.exceptions.UserNotFoundException;
 import SocNetwork.models.User;
+import SocNetwork.models.enums.ServerResponse;
 import SocNetwork.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,4 +38,12 @@ public class ProfileController {
         return userService.getUserByIdHidePassword(id);
     }
 
+    @RequestMapping(value = "/api/profile/{id}/add", method = RequestMethod.POST)
+    public ResponseEntity<Integer> addFriend(@PathVariable long id, Principal principal) throws UserNotFoundException{
+        String email = principal.getName();
+        User whoAdds = userService.getUserByEmail(email);
+        User whoIsAdded = userService.getUserById(id);
+        userService.addToFriendList(whoAdds, whoIsAdded);
+        return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
+    }
 }
