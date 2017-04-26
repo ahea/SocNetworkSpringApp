@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by aleksei on 05.03.17.
@@ -31,12 +33,12 @@ public class ProfileController {
     @RequestMapping(value = "/api/profile/me", method = RequestMethod.GET)
     public User getMyProfile(Principal principal) {
         String email = principal.getName();
-        return userService.getUserByEmailHidePassword(email);
+        return userService.getUserByEmailHide(email);
     }
 
     @RequestMapping(value = "/api/profile/{id}", method = RequestMethod.GET)
     public User getProfile(@PathVariable long id) throws UserNotFoundException {
-        return userService.getUserByIdHidePassword(id);
+        return userService.getUserByIdHide(id);
     }
 
     @RequestMapping(value = "/api/profile/{id}/add", method = RequestMethod.POST)
@@ -59,19 +61,27 @@ public class ProfileController {
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/profile/{id}/friends")
+    @RequestMapping(value = "/api/profile/{id}/friends", method = RequestMethod.GET)
     public ResponseEntity<List> getFriends(@PathVariable long id)
             throws UserNotFoundException {
         User user = userService.getUserById(id);
-        List list = userService.getFriends(user);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        Set set = userService.getFriends(user);
+        return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/profile/{id}/subscribers")
+    @RequestMapping(value = "/api/profile/{id}/subscribers", method = RequestMethod.GET)
     public ResponseEntity<List> getSubsribers(@PathVariable long id)
         throws UserNotFoundException{
         User user = userService.getUserById(id);
-        List list = userService.getSubscribers(user);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        Set set = userService.getSubscribers(user);
+        return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/profile/{id}/subscriptions", method = RequestMethod.GET)
+    public ResponseEntity<List> getSubscriptions(@PathVariable long id)
+        throws UserNotFoundException{
+        User user = userService.getUserById(id);
+        Set set = userService.getSubscriptions(user);
+        return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
     }
 }

@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByIdHidePassword(Long id) throws UserNotFoundException {
+    public User getUserByIdHide(Long id) throws UserNotFoundException {
         User user = userRepository.findOne(id);
         if (user == null) throw new UserNotFoundException("User not found");
         user.setPassword(null);
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public  User getUserByEmailHidePassword(String email){
+    public  User getUserByEmailHide(String email){
         User user = userRepository.findByEmail(email);
         user.setPassword(null);
         user.setFriendList(null);
@@ -81,7 +81,9 @@ public class UserServiceImpl implements UserService {
         if (getUserByEmail(user.getEmail()) != null)
             throw new EmailExistsException("This email is already used");
         Role role = roleRepository.findByName("USER");
-        user.setRoles(Arrays.asList(role));
+        Set<Role> set = new HashSet<>();
+        set.add(role);
+        user.setRoles(set);
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
     }
@@ -91,7 +93,7 @@ public class UserServiceImpl implements UserService {
             throws UserNotFoundException{
         if (whoIsAdded == null)
             throw new UserNotFoundException("User not found");
-        Collection<User> friendList = userRepository.getFriendList(whoAdds.getId());
+        Set<User> friendList = whoAdds.getFriendList();
         if (friendList == null)
             friendList = new HashSet<>();
         if (friendList.contains(whoIsAdded))
@@ -106,7 +108,7 @@ public class UserServiceImpl implements UserService {
             throws UserNotFoundException{
         if (whoIsRemoved == null)
             throw new UserNotFoundException("User not found");
-        Collection<User> friendList = userRepository.getFriendList(whoRemoves.getId());
+        Set<User> friendList = whoRemoves.getFriendList();
         if (friendList == null || !friendList.contains(whoIsRemoved))
             throw new UserNotFoundException("User is not in friendlist");
         friendList.remove(whoIsRemoved);
@@ -115,34 +117,55 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List getFriends(User user) throws UserNotFoundException {
+    public Set getFriends(User user) throws UserNotFoundException {
         if (user == null)
             throw new UserNotFoundException("User not found");
-        Collection<User> list = userRepository.getFriends(user.getId());
-        for (User friend  : list) {
-            friend.setFriendList(null);
-            friend.setBlackList(null);
-            friend.setPassword(null);
+        Set<User> set = user.getFriendList();
+        Set<User> result = new HashSet<>();
+        for (User friend  : set) {
+            if (friend.getFriendList().contains(user)) {
+                friend.setFriendList(null);
+                friend.setBlackList(null);
+                friend.setPassword(null);
+                result.add(friend);
+            }
         }
-        return new ArrayList(list);
+        return result;
     }
 
     @Override
-    public List getSubscribers(User user) throws UserNotFoundException {
+    public Set getSubscribers(User user) throws UserNotFoundException {
         if (user == null)
             throw new UserNotFoundException("User not found");
-        Collection<User> subscribersList = userRepository.getSubscribersList(user.getId());
-        Collection<User> friendList = userRepository.getFriendList(user.getId());
-        List<User> resultList = new ArrayList<>();
-        for (User subscriber : subscribersList){
-            if (!friendList.contains(subscriber)) {
-                subscriber.setFriendList(null);
-                subscriber.setBlackList(null);
-                subscriber.setPassword(null);
-                resultList.add(subscriber);
+        Collection<User> incFriends = userRepository.getIncomingFriendsById(user.getId());
+        Set<User> friendList = user.getFriendList();
+        Set<User> result = new HashSet<>();
+        for (User friend : incFriends){
+            if (!friendList.contains(friend)) {
+                friend.setFriendList(null);
+                friend.setBlackList(null);
+                friend.setPassword(null);
+                result.add(friend);
             }
         }
-        return resultList;
+        return result;
+    }
+
+    @Override
+    public Set getSubscriptions(User user) throws UserNotFoundException{
+        if (user == null)
+            throw new UserNotFoundException("User not found");
+        Set<User> set = user.getFriendList();
+        Set<User> result = new HashSet<>();
+        for (User friend  : set) {
+            if (!friend.getFriendList().contains(user)) {
+                friend.setFriendList(null);
+                friend.setBlackList(null);
+                friend.setPassword(null);
+                result.add(friend);
+            }
+        }
+        return result;
     }
 
     @Override

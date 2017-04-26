@@ -8,6 +8,8 @@ import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by aleksei on 11.02.17.
@@ -46,16 +48,16 @@ public class User {
     @Property
     private boolean online;
 
-    private Collection<UserHasLanguage> hasLanguage;
+    private Set<UserHasLanguage> hasLanguage = new HashSet<>();
 
     @Relationship(type="HAS_ROLE", direction=Relationship.OUTGOING)
-    private Collection<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @Relationship(type="HAS_IN_FRIENDLIST", direction=Relationship.OUTGOING)
-    private Collection<User> friendList;
+    private Set<User> friendList = new HashSet<>();
 
     @Relationship(type="HAS_IN_BLACKLIST", direction=Relationship.OUTGOING)
-    private Collection<User> blackList;
+    private Set<User> blackList = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -137,35 +139,35 @@ public class User {
         this.online = online;
     }
 
-    public Collection<UserHasLanguage> getHasLanguage() {
+    public Set<UserHasLanguage> getHasLanguage() {
         return hasLanguage;
     }
 
-    public void setHasLanguage(Collection<UserHasLanguage> hasLanguage) {
+    public void setHasLanguage(Set<UserHasLanguage> hasLanguage) {
         this.hasLanguage = hasLanguage;
     }
 
-    public Collection<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
-    public Collection<User> getBlackList() {
-        return blackList;
-    }
-
-    public void setBlackList(Collection<User> blackList) {
-        this.blackList = blackList;
-    }
-
-    public Collection<User> getFriendList() {
+    public Set<User> getFriendList() {
         return friendList;
     }
 
-    public void setFriendList(Collection<User> friendList) {
+    public void setFriendList(Set<User> friendList) {
         this.friendList = friendList;
+    }
+
+    public Set<User> getBlackList() {
+        return blackList;
+    }
+
+    public void setBlackList(Set<User> blackList) {
+        this.blackList = blackList;
     }
 }
