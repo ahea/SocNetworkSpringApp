@@ -39,11 +39,22 @@ public class ProfileController {
     }
 
     @RequestMapping(value = "/api/profile/{id}/add", method = RequestMethod.POST)
-    public ResponseEntity<Integer> addFriend(@PathVariable long id, Principal principal) throws UserNotFoundException{
+    public ResponseEntity<Integer> addFriend(@PathVariable long id, Principal principal)
+            throws UserNotFoundException{
         String email = principal.getName();
         User whoAdds = userService.getUserByEmail(email);
         User whoIsAdded = userService.getUserById(id);
         userService.addToFriendList(whoAdds, whoIsAdded);
+        return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/profile/{id}/delete", method = RequestMethod.POST)
+    public ResponseEntity<Integer> removeFriend(@PathVariable long id, Principal principal)
+            throws UserNotFoundException{
+        String email = principal.getName();
+        User whoRemoves = userService.getUserByEmail(email);
+        User whoIsRemoved = userService.getUserById(id);
+        userService.removeFromFriendList(whoRemoves, whoIsRemoved);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
 }

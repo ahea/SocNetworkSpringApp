@@ -24,6 +24,8 @@ public interface UserService {
 
     void addToFriendList(User whoAdds, User whoIsAdded) throws UserNotFoundException;
 
+    void removeFromFriendList(User whoRemoves, User whoIsRemoved) throws UserNotFoundException;
+
     void deleteUserById(Long id);
 
     void deleteUser(User user);
