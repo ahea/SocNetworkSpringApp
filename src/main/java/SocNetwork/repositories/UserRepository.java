@@ -19,4 +19,10 @@ public interface UserRepository extends GraphRepository<User> {
             "RETURN b")
     Collection<User> getFriendList (@Param("userId") Long id);
 
+    @Query("match (a)-[rel1:HAS_IN_FRIENDLIST]->(b)," +
+            " (b)-[rel2:HAS_IN_FRIENDLIST]->(a)" +
+            " where id(a) = {userId}" +
+            " return b")
+    Collection<User> getFriends(@Param("userId") Long id);
+
 }

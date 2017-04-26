@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * Created by aleksei on 11.02.17.
@@ -60,6 +57,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findOne(id);
         if (user == null) throw new UserNotFoundException("User not found");
         user.setPassword(null);
+        user.setFriendList(null);
+        user.setBlackList(null);
         return user;
     }
 
@@ -72,6 +71,8 @@ public class UserServiceImpl implements UserService {
     public  User getUserByEmailHidePassword(String email){
         User user = userRepository.findByEmail(email);
         user.setPassword(null);
+        user.setFriendList(null);
+        user.setBlackList(null);
         return user;
     }
 
@@ -111,6 +112,19 @@ public class UserServiceImpl implements UserService {
         friendList.remove(whoIsRemoved);
         whoRemoves.setFriendList(friendList);
         userRepository.save(whoRemoves);
+    }
+
+    @Override
+    public List getFriends(User user) throws UserNotFoundException {
+        if (user == null)
+            throw new UserNotFoundException("User not found");
+        Collection<User> list = userRepository.getFriends(user.getId());
+        for (User friend  : list) {
+            friend.setFriendList(null);
+            friend.setBlackList(null);
+            friend.setPassword(null);
+        }
+        return new ArrayList(list);
     }
 
     @Override

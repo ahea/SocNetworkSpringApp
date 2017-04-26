@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
+import java.util.List;
 
 /**
  * Created by aleksei on 05.03.17.
@@ -56,5 +57,13 @@ public class ProfileController {
         User whoIsRemoved = userService.getUserById(id);
         userService.removeFromFriendList(whoRemoves, whoIsRemoved);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/profile/{id}/friends")
+    public ResponseEntity<List> getFriends(@PathVariable long id)
+            throws UserNotFoundException {
+        User user = userService.getUserById(id);
+        List list = userService.getFriends(user);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

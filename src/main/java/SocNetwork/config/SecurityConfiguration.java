@@ -33,7 +33,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/api/profile/{id}/add").hasRole("USER")
                 .and()
-                .authorizeRequests().antMatchers("/api/profile/{id}/delete").hasRole("USER");
+                .authorizeRequests().antMatchers("/api/profile/{id}/delete").hasRole("USER")
+                .and()
+                .authorizeRequests().antMatchers("/api/profile/{id}/friends").hasRole("USER");
     }
 
     @Override

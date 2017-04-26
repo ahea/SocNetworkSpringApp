@@ -4,6 +4,8 @@ import SocNetwork.exceptions.EmailExistsException;
 import SocNetwork.exceptions.UserNotFoundException;
 import SocNetwork.models.User;
 
+import java.util.List;
+
 /**
  * Created by aleksei on 11.02.17.
  */
@@ -25,6 +27,8 @@ public interface UserService {
     void addToFriendList(User whoAdds, User whoIsAdded) throws UserNotFoundException;
 
     void removeFromFriendList(User whoRemoves, User whoIsRemoved) throws UserNotFoundException;
+
+    List getFriends(User user) throws UserNotFoundException;
 
     void deleteUserById(Long id);
 
