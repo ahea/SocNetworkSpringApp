@@ -66,4 +66,12 @@ public class ProfileController {
         List list = userService.getFriends(user);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/api/profile/{id}/subscribers")
+    public ResponseEntity<List> getSubsribers(@PathVariable long id)
+        throws UserNotFoundException{
+        User user = userService.getUserById(id);
+        List list = userService.getSubscribers(user);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }

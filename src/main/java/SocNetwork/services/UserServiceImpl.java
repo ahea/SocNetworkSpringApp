@@ -128,6 +128,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List getSubscribers(User user) throws UserNotFoundException {
+        if (user == null)
+            throw new UserNotFoundException("User not found");
+        Collection<User> subscribersList = userRepository.getSubscribersList(user.getId());
+        Collection<User> friendList = userRepository.getFriendList(user.getId());
+        List<User> resultList = new ArrayList<>();
+        for (User subscriber : subscribersList){
+            if (!friendList.contains(subscriber)) {
+                subscriber.setFriendList(null);
+                subscriber.setBlackList(null);
+                subscriber.setPassword(null);
+                resultList.add(subscriber);
+            }
+        }
+        return resultList;
+    }
+
+    @Override
     public void deleteUserById(Long id){
         userRepository.delete(id);
     }

@@ -30,6 +30,8 @@ public interface UserService {
 
     List getFriends(User user) throws UserNotFoundException;
 
+    List getSubscribers(User user) throws UserNotFoundException;
+
     void deleteUserById(Long id);
 
     void deleteUser(User user);
