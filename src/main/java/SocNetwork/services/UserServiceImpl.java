@@ -197,6 +197,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Set getBlackList(User user){
+        Set<User> set = user.getBlackList();
+        for (User blockedUser : set){
+            blockedUser.setFriendList(null);
+            blockedUser.setBlackList(null);
+            blockedUser.setPassword(null);
+        }
+        return set;
+    }
+
+    @Override
     public void deleteUserById(Long id){
         userRepository.delete(id);
     }

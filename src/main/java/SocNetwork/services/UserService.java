@@ -39,6 +39,8 @@ public interface UserService {
 
     Set getSubscriptions(User user) throws UserNotFoundException;
 
+    Set getBlackList(User user);
+
     void deleteUserById(Long id);
 
     void deleteUser(User user);

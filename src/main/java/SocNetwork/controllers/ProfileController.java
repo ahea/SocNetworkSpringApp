@@ -104,4 +104,13 @@ public class ProfileController {
         Set set = userService.getSubscriptions(user);
         return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "api/profile/blacklist", method = RequestMethod.GET)
+    public ResponseEntity<List> getBlacklist(Principal principal){
+        String email = principal.getName();
+        User user = userService.getUserByEmail(email);
+        Set set = userService.getBlackList(user);
+        return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
+    }
+
 }

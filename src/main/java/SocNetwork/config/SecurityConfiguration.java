@@ -43,7 +43,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/api/profile/{id}/subscribers").hasRole("USER")
                 .and()
-                .authorizeRequests().antMatchers("/api/profile/{id}/subscriptions").hasRole("USER");
+                .authorizeRequests().antMatchers("/api/profile/{id}/subscriptions").hasRole("USER")
+                .and()
+                .authorizeRequests().antMatchers("/api/profile/blacklist").hasRole("USER");
     }
 
     @Override
