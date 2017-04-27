@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addToFriendList (User whoAdds, User whoIsAdded)
-            throws UserNotFoundException{
+            throws UserNotFoundException {
         if (whoIsAdded == null)
             throw new UserNotFoundException("User not found");
         Set<User> friendList = whoAdds.getFriendList();
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void removeFromFriendList(User whoRemoves, User whoIsRemoved)
-            throws UserNotFoundException{
+            throws UserNotFoundException {
         if (whoIsRemoved == null)
             throw new UserNotFoundException("User not found");
         Set<User> friendList = whoRemoves.getFriendList();
@@ -113,6 +113,34 @@ public class UserServiceImpl implements UserService {
             throw new UserNotFoundException("User is not in friendlist");
         friendList.remove(whoIsRemoved);
         whoRemoves.setFriendList(friendList);
+        userRepository.save(whoRemoves);
+    }
+
+    @Override
+    public void addToBlackList(User whoBlocks, User whoIsBlocked)
+            throws UserNotFoundException {
+        if (whoBlocks == null)
+            throw new UserNotFoundException("User not found");
+        Set<User> blackList = whoBlocks.getBlackList();
+        if (blackList == null)
+            blackList = new HashSet<>();
+        if (blackList.contains(whoIsBlocked))
+            return;
+        blackList.add(whoIsBlocked);
+        whoBlocks.setBlackList(blackList);
+        userRepository.save(whoBlocks);
+    }
+
+    @Override
+    public void removeFromBlackList(User whoRemoves, User whoIsRemoved)
+            throws UserNotFoundException {
+        if (whoIsRemoved == null)
+            throw new UserNotFoundException("User not found");
+        Set<User> blackList = whoRemoves.getBlackList();
+        if (blackList == null || !blackList.contains(whoIsRemoved))
+            throw new UserNotFoundException("User is not in friendlist");
+        blackList.remove(whoIsRemoved);
+        whoRemoves.setBlackList(blackList);
         userRepository.save(whoRemoves);
     }
 

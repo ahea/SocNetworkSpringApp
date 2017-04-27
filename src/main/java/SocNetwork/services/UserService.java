@@ -29,6 +29,10 @@ public interface UserService {
 
     void removeFromFriendList(User whoRemoves, User whoIsRemoved) throws UserNotFoundException;
 
+    void addToBlackList(User whoBlocks, User whoIsBlocked) throws UserNotFoundException;
+
+    void removeFromBlackList(User whoRemoves, User whoIsRemoved) throws UserNotFoundException;
+
     Set getFriends(User user) throws UserNotFoundException;
 
     Set getSubscribers(User user) throws UserNotFoundException;

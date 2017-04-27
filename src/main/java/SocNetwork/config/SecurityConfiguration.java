@@ -35,9 +35,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/api/profile/{id}/delete").hasRole("USER")
                 .and()
+                .authorizeRequests().antMatchers("/api/profile/{id}/block").hasRole("USER")
+                .and()
+                .authorizeRequests().antMatchers("/api/profile/{id}/unblock").hasRole("USER")
+                .and()
                 .authorizeRequests().antMatchers("/api/profile/{id}/friends").hasRole("USER")
                 .and()
-                .authorizeRequests().antMatchers("/api/profile/{id}/subscribers").hasRole("USER");
+                .authorizeRequests().antMatchers("/api/profile/{id}/subscribers").hasRole("USER")
+                .and()
+                .authorizeRequests().antMatchers("/api/profile/{id}/subscriptions").hasRole("USER");
     }
 
     @Override
