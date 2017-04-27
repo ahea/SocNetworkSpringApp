@@ -7,10 +7,7 @@ import SocNetwork.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -39,6 +36,14 @@ public class ProfileController {
     @RequestMapping(value = "/api/profile/{id}", method = RequestMethod.GET)
     public User getProfile(@PathVariable long id) throws UserNotFoundException {
         return userService.getUserByIdHide(id);
+    }
+
+    @RequestMapping(value = "/api/profile/edit", method = RequestMethod.POST)
+    public ResponseEntity<Integer> updateProfile(@RequestBody User updatedUser, Principal principal){
+        String email = principal.getName();
+        User user = userService.getUserByEmailHide(email);
+        userService.updateUser(user, updatedUser);
+        return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/api/profile/{id}/add", method = RequestMethod.POST)

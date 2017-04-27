@@ -89,6 +89,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateUser(User user, User updatedUser){
+        user.setName(updatedUser.getName());
+        user.setAbout(updatedUser.getAbout());
+        user.setAge(updatedUser.getAge());
+        user.setCountry(updatedUser.getCountry());
+        user.setGender(updatedUser.getGender());
+        userRepository.save(user);
+    }
+
+    @Override
     public void addToFriendList (User whoAdds, User whoIsAdded)
             throws UserNotFoundException {
         if (whoIsAdded == null)
