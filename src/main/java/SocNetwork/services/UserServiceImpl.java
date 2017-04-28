@@ -48,37 +48,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Long id) {
-        return userRepository.findOne(id);
-    }
-
-    @Override
-    public User getUserByIdHide(Long id) throws UserNotFoundException {
+    public User getUserById(Long id) throws UserNotFoundException{
         User user = userRepository.findOne(id);
         if (user == null) throw new UserNotFoundException("User not found");
-        user.setPassword(null);
-        user.setFriendList(null);
-        user.setBlackList(null);
         return user;
     }
 
     @Override
-    public User getUserByEmail(String email){
-        return userRepository.findByEmail(email);
-    }
-
-    @Override
-    public  User getUserByEmailHide(String email){
+    public User getUserByEmail(String email) throws UserNotFoundException{
         User user = userRepository.findByEmail(email);
-        user.setPassword(null);
-        user.setFriendList(null);
-        user.setBlackList(null);
+        if (user == null) throw new UserNotFoundException("User not found");
         return user;
     }
 
     @Override
     public void saveUser(User user) throws EmailExistsException {
-        if (getUserByEmail(user.getEmail()) != null)
+        if (userRepository.findByEmail(user.getEmail()) != null)
             throw new EmailExistsException("This email is already used");
         Role role = roleRepository.findByName("USER");
         Set<Role> set = new HashSet<>();
@@ -95,6 +80,7 @@ public class UserServiceImpl implements UserService {
         user.setAge(updatedUser.getAge());
         user.setCountry(updatedUser.getCountry());
         user.setGender(updatedUser.getGender());
+        user.setPassword(updatedUser.getPassword());
         userRepository.save(user);
     }
 

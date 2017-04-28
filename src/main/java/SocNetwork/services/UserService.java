@@ -15,13 +15,9 @@ public interface UserService {
 
     Iterable<User> getAllUsers();
 
-    User getUserById(Long id);
+    User getUserById(Long id) throws UserNotFoundException;
 
-    User getUserByIdHide(Long id) throws UserNotFoundException;
-
-    User getUserByEmail(String email);
-
-    User getUserByEmailHide(String email);
+    User getUserByEmail(String email) throws UserNotFoundException;
 
     void saveUser(User user) throws EmailExistsException;
 

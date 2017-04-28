@@ -28,20 +28,21 @@ public class ProfileController {
     }
 
     @RequestMapping(value = "/api/profile/me", method = RequestMethod.GET)
-    public User getMyProfile(Principal principal) {
+    public User getMyProfile(Principal principal) throws UserNotFoundException{
         String email = principal.getName();
-        return userService.getUserByEmailHide(email);
+        return userService.getUserByEmail(email).hideRelationships();
     }
 
     @RequestMapping(value = "/api/profile/{id}", method = RequestMethod.GET)
     public User getProfile(@PathVariable long id) throws UserNotFoundException {
-        return userService.getUserByIdHide(id);
+        return userService.getUserById(id).hideCredentials().hideRelationships();
     }
 
     @RequestMapping(value = "/api/profile/edit", method = RequestMethod.POST)
-    public ResponseEntity<Integer> updateProfile(@RequestBody User updatedUser, Principal principal){
+    public ResponseEntity<Integer> updateProfile(@RequestBody User updatedUser, Principal principal)
+            throws UserNotFoundException{
         String email = principal.getName();
-        User user = userService.getUserByEmailHide(email);
+        User user = userService.getUserByEmail(email);
         userService.updateUser(user, updatedUser);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
@@ -111,7 +112,8 @@ public class ProfileController {
     }
 
     @RequestMapping(value = "api/profile/blacklist", method = RequestMethod.GET)
-    public ResponseEntity<List> getBlacklist(Principal principal){
+    public ResponseEntity<List> getBlacklist(Principal principal)
+            throws UserNotFoundException{
         String email = principal.getName();
         User user = userService.getUserByEmail(email);
         Set set = userService.getBlackList(user);

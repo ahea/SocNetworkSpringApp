@@ -170,4 +170,16 @@ public class User {
     public void setBlackList(Set<User> blackList) {
         this.blackList = blackList;
     }
+
+    public User hideRelationships(){
+        this.friendList = null;
+        this.blackList = null;
+        return this;
+    }
+
+    public User hideCredentials(){
+        this.email = null;
+        this.password = null;
+        return this;
+    }
 }
