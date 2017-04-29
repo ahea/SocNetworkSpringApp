@@ -1,7 +1,7 @@
 package SocNetwork.controllers;
 
 import SocNetwork.exceptions.EmailExistsException;
-import SocNetwork.models.User;
+import SocNetwork.models.nodeEntities.User;
 import SocNetwork.models.enums.ServerResponse;
 import SocNetwork.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

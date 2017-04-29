@@ -1,6 +1,6 @@
 package SocNetwork.repositories;
 
-import SocNetwork.models.User;
+import SocNetwork.models.nodeEntities.User;
 import org.springframework.data.neo4j.annotation.Query;
 import org.springframework.data.neo4j.repository.GraphRepository;
 import org.springframework.data.repository.query.Param;

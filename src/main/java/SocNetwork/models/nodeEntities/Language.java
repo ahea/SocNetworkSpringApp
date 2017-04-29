@@ -1,4 +1,4 @@
-package SocNetwork.models;
+package SocNetwork.models.nodeEntities;
 
 import SocNetwork.models.enums.LanguageName;
 import org.neo4j.ogm.annotation.GraphId;

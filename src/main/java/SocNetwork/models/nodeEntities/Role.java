@@ -1,4 +1,4 @@
-package SocNetwork.models;
+package SocNetwork.models.nodeEntities;
 
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;

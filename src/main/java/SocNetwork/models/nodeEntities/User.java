@@ -1,13 +1,13 @@
-package SocNetwork.models;
+package SocNetwork.models.nodeEntities;
 
 import SocNetwork.models.enums.Country;
 import SocNetwork.models.enums.Gender;
+import SocNetwork.models.relationshipEntities.UserHasLanguage;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,6 +49,9 @@ public class User {
     private boolean online;
 
     private Set<UserHasLanguage> hasLanguage = new HashSet<>();
+
+    @Relationship(type="IN_CHATROOM", direction=Relationship.OUTGOING)
+    private Set<ChatRoom> chatRooms = new HashSet<>();
 
     @Relationship(type="HAS_ROLE", direction=Relationship.OUTGOING)
     private Set<Role> roles = new HashSet<>();
@@ -145,6 +148,14 @@ public class User {
 
     public void setHasLanguage(Set<UserHasLanguage> hasLanguage) {
         this.hasLanguage = hasLanguage;
+    }
+
+    public Set<ChatRoom> getChatRooms() {
+        return chatRooms;
+    }
+
+    public void setChatRooms(Set<ChatRoom> chatRooms) {
+        this.chatRooms = chatRooms;
     }
 
     public Set<Role> getRoles() {

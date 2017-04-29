@@ -2,9 +2,8 @@ package SocNetwork.services;
 
 import SocNetwork.exceptions.EmailExistsException;
 import SocNetwork.exceptions.UserNotFoundException;
-import SocNetwork.models.User;
+import SocNetwork.models.nodeEntities.User;
 
-import java.util.List;
 import java.util.Set;
 
 /**

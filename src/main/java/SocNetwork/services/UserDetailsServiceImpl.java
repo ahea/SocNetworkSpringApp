@@ -1,7 +1,7 @@
 package SocNetwork.services;
 
-import SocNetwork.models.Role;
-import SocNetwork.models.User;
+import SocNetwork.models.nodeEntities.Role;
+import SocNetwork.models.nodeEntities.User;
 import SocNetwork.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

@@ -1,6 +1,6 @@
 package SocNetwork.preload;
 
-import SocNetwork.models.Role;
+import SocNetwork.models.nodeEntities.Role;
 import SocNetwork.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;

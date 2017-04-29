@@ -1,6 +1,6 @@
 package SocNetwork.repositories;
 
-import SocNetwork.models.Language;
+import SocNetwork.models.nodeEntities.Language;
 import SocNetwork.models.enums.LanguageName;
 import org.springframework.data.neo4j.repository.GraphRepository;
 

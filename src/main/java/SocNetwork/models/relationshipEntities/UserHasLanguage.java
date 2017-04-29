@@ -1,5 +1,7 @@
-package SocNetwork.models;
+package SocNetwork.models.relationshipEntities;
 
+import SocNetwork.models.nodeEntities.Language;
+import SocNetwork.models.nodeEntities.User;
 import SocNetwork.models.enums.LanguageLevel;
 import org.neo4j.ogm.annotation.*;
 

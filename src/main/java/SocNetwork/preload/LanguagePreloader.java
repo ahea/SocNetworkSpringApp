@@ -1,6 +1,6 @@
 package SocNetwork.preload;
 
-import SocNetwork.models.Language;
+import SocNetwork.models.nodeEntities.Language;
 import SocNetwork.models.enums.LanguageName;
 import SocNetwork.repositories.LanguageRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,24 +2,20 @@ package SocNetwork.services;
 
 import SocNetwork.exceptions.EmailExistsException;
 import SocNetwork.exceptions.UserNotFoundException;
-import SocNetwork.models.Role;
-import SocNetwork.models.User;
+import SocNetwork.models.nodeEntities.Role;
+import SocNetwork.models.nodeEntities.User;
 import SocNetwork.repositories.RoleRepository;
 import SocNetwork.repositories.UserRepository;
-import org.neo4j.ogm.transaction.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.neo4j.template.Neo4jTemplate;
-import org.springframework.data.neo4j.transaction.Neo4jTransactionManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.*;
 
 /**
  * Created by aleksei on 11.02.17.
  */
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -148,10 +144,7 @@ public class UserServiceImpl implements UserService {
         Set<User> result = new HashSet<>();
         for (User friend  : set) {
             if (friend.getFriendList().contains(user)) {
-                friend.setFriendList(null);
-                friend.setBlackList(null);
-                friend.setPassword(null);
-                result.add(friend);
+                result.add(friend.hideCredentials().hideRelationships());
             }
         }
         return result;
@@ -166,10 +159,7 @@ public class UserServiceImpl implements UserService {
         Set<User> result = new HashSet<>();
         for (User friend : incFriends){
             if (!friendList.contains(friend)) {
-                friend.setFriendList(null);
-                friend.setBlackList(null);
-                friend.setPassword(null);
-                result.add(friend);
+                result.add(friend.hideCredentials().hideRelationships());
             }
         }
         return result;
@@ -183,10 +173,7 @@ public class UserServiceImpl implements UserService {
         Set<User> result = new HashSet<>();
         for (User friend  : set) {
             if (!friend.getFriendList().contains(user)) {
-                friend.setFriendList(null);
-                friend.setBlackList(null);
-                friend.setPassword(null);
-                result.add(friend);
+                result.add(friend.hideCredentials().hideRelationships());
             }
         }
         return result;
@@ -196,9 +183,7 @@ public class UserServiceImpl implements UserService {
     public Set getBlackList(User user){
         Set<User> set = user.getBlackList();
         for (User blockedUser : set){
-            blockedUser.setFriendList(null);
-            blockedUser.setBlackList(null);
-            blockedUser.setPassword(null);
+            blockedUser.hideCredentials().hideRelationships();
         }
         return set;
     }

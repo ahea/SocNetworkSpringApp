@@ -1,6 +1,6 @@
 package SocNetwork.repositories;
 
-import SocNetwork.models.Role;
+import SocNetwork.models.nodeEntities.Role;
 import org.springframework.data.neo4j.repository.GraphRepository;
 
 /**
