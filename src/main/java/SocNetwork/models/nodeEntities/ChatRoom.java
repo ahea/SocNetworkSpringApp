@@ -4,6 +4,7 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -17,7 +18,7 @@ public class ChatRoom {
     private Long id;
 
     @Relationship(type = "HAS_MESSAGE", direction = "OUTGOING")
-    private Set<Message> messages;
+    private Set<Message> messages = new LinkedHashSet<>();
 
     public Long getId() {
         return id;
