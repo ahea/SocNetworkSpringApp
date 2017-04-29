@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 /**
  * Created by aleksei on 29.04.17.
@@ -33,6 +34,15 @@ public class ChatController {
         this.userService = userService;
     }
 
+    @RequestMapping(value = "api/messages", method = RequestMethod.GET)
+    public ResponseEntity<List> getLastMessages(Principal principal)
+            throws UserNotFoundException{
+        String email = principal.getName();
+        User user = userService.getUserByEmail(email);
+        List list = chatService.getLastMessages(user);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "api/messages/{id}", method = RequestMethod.POST)
     public ResponseEntity<Integer> sendMessage(@RequestBody Message message,
                                                @PathVariable long id,
@@ -43,7 +53,5 @@ public class ChatController {
         chatService.sendMessage(sender, recipient, message);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
-
-
 
 }

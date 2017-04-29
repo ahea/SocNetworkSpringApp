@@ -10,7 +10,9 @@ import SocNetwork.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -39,31 +41,53 @@ public class ChatServiceImpl implements ChatService{
         this.userRepository = userRepository;
     }
 
+    @Override
+    public List getLastMessages(User user) throws UserNotFoundException{
+        if (user == null) throw new UserNotFoundException("User not found");
+        Set<ChatRoom> rooms = user.getChatRooms();
+        List<Message> result = new ArrayList<>();
+        for (ChatRoom room : rooms){
+            room = chatRoomRepository.findOne(room.getId());
+            List<Message> messages = room.getMessages();
+            result.add(messages.get(messages.size() - 1));
+        }
+        return result;
+    }
+
+    @Override
     public void sendMessage(User sender, User recipient, Message message)
             throws UserNotFoundException{
         if (sender == null || recipient == null) throw new UserNotFoundException("User not found");
-        Collection<ChatRoom> commonChatRooms = chatRoomRepository.findCommon(
+        Collection<Long> commonChatRooms = chatRoomRepository.findCommon(
                 sender.getId(), recipient.getId());
         ChatRoom commonChatRoom;
-        if (commonChatRooms.isEmpty()){
+        if (commonChatRooms.isEmpty()) {
+
             commonChatRoom = new ChatRoom();
             commonChatRoom = chatRoomRepository.save(commonChatRoom);
-            Set<ChatRoom> senderChatRooms = sender.getChatRooms();
-            Set<ChatRoom> recipientChatRooms = recipient.getChatRooms();
-            senderChatRooms.add(commonChatRoom);
-            recipientChatRooms.add(commonChatRoom);
-            sender.setChatRooms(senderChatRooms);
-            recipient.setChatRooms(recipientChatRooms);
-            userRepository.save(sender);
-            userRepository.save(recipient);
+
         } else {
-            commonChatRoom = commonChatRooms.iterator().next();
+            commonChatRoom = chatRoomRepository.findOne(
+                    commonChatRooms.iterator().next());
         }
+
         message.setSenderId(sender.getId());
         message.setRecipientId(recipient.getId());
-        Set<Message> messages = commonChatRoom.getMessages();
+        message = messageRepository.save(message);
+
+        List<Message> messages = commonChatRoom.getMessages();
         messages.add(message);
         commonChatRoom.setMessages(messages);
-        chatRoomRepository.save(commonChatRoom);
+        commonChatRoom = chatRoomRepository.save(commonChatRoom);
+
+        Set<ChatRoom> senderChatRooms = sender.getChatRooms();
+        senderChatRooms.add(commonChatRoom);
+        sender.setChatRooms(senderChatRooms);
+        userRepository.save(sender);
+
+        Set<ChatRoom> recipientChatRooms = recipient.getChatRooms();
+        recipientChatRooms.add(commonChatRoom);
+        recipient.setChatRooms(recipientChatRooms);
+        userRepository.save(recipient);
     }
 }
