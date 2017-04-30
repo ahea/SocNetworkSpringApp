@@ -43,10 +43,24 @@ public class ChatController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/api/messages/id={id}&offset={offset}&count={count}", method = RequestMethod.GET)
+    public ResponseEntity<List> getMessagesFromUser (@PathVariable long id,
+                                                     @PathVariable int offset,
+                                                     @PathVariable int count,
+                                                     Principal principal)
+            throws UserNotFoundException{
+        String email = principal.getName();
+        User whoRequests = userService.getUserByEmail(email);
+        User withWhom = userService.getUserById(id);
+        List list = chatService.getMessagesWithUser(whoRequests, withWhom, offset, count);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "api/messages/{id}", method = RequestMethod.POST)
     public ResponseEntity<Integer> sendMessage(@RequestBody Message message,
                                                @PathVariable long id,
-                                               Principal principal) throws UserNotFoundException{
+                                               Principal principal)
+            throws UserNotFoundException{
         String email = principal.getName();
         User sender = userService.getUserByEmail(email);
         User recipient = userService.getUserById(id);

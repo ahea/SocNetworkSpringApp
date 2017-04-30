@@ -49,7 +49,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests().antMatchers("/api/profile/blacklist").hasRole("USER")
                 .and()
-                .authorizeRequests().antMatchers("/api/messages/{id}").hasRole("USER");
+                .authorizeRequests().antMatchers("/api/messages/{id}").hasRole("USER")
+                .and()
+                .authorizeRequests().antMatchers("/api/messages").hasRole("USER")
+                .and()
+                .authorizeRequests().antMatchers("/api/messages/id={id}&offset={offset}&count={count}").hasRole("USER");
     }
 
     @Override

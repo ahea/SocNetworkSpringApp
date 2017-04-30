@@ -13,6 +13,9 @@ public interface ChatService {
 
     List getLastMessages(User user) throws UserNotFoundException;
 
+    List getMessagesWithUser(User whoReceives, User whoSent, int offset, int count)
+            throws UserNotFoundException;
+
     void sendMessage(User sender, User recipient, Message message)
         throws UserNotFoundException;
 

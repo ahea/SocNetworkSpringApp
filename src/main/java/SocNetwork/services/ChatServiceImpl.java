@@ -10,10 +10,7 @@ import SocNetwork.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by aleksei on 29.04.17.
@@ -56,6 +53,22 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
+    public List getMessagesWithUser(User whoRequests, User withWhom, int offset, int count)
+            throws UserNotFoundException{
+        if (whoRequests == null ||withWhom == null) throw new UserNotFoundException("User not found");
+        Collection<Long> commonRoom = chatRoomRepository.findCommon(whoRequests.getId(), withWhom.getId());
+        if (commonRoom.size() == 0) return null;
+        ChatRoom room = chatRoomRepository.findOne(commonRoom.iterator().next());
+        List<Message> messages = room.getMessages();
+        List<Message> result = new ArrayList<>();
+        for (int index = offset; index < messages.size() && count > 0; index++){
+            result.add(messages.get(index));
+            count--;
+        }
+        return result;
+    }
+
+    @Override
     public void sendMessage(User sender, User recipient, Message message)
             throws UserNotFoundException{
         if (sender == null || recipient == null) throw new UserNotFoundException("User not found");
@@ -84,6 +97,7 @@ public class ChatServiceImpl implements ChatService{
 
         message.setSenderId(sender.getId());
         message.setRecipientId(recipient.getId());
+        message.setDatetime(new Date());
         message = messageRepository.save(message);
 
         List<Message> messages = commonChatRoom.getMessages();
@@ -91,4 +105,5 @@ public class ChatServiceImpl implements ChatService{
         commonChatRoom.setMessages(messages);
         chatRoomRepository.save(commonChatRoom);
     }
+
 }
