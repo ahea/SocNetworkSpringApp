@@ -47,6 +47,7 @@ public class ChatServiceImpl implements ChatService{
         Set<ChatRoom> rooms = user.getChatRooms();
         List<Message> result = new ArrayList<>();
         for (ChatRoom room : rooms){
+            //next line is needed because user was loaded with depth = 1
             room = chatRoomRepository.findOne(room.getId());
             List<Message> messages = room.getMessages();
             result.add(messages.get(messages.size() - 1));
@@ -66,6 +67,16 @@ public class ChatServiceImpl implements ChatService{
             commonChatRoom = new ChatRoom();
             commonChatRoom = chatRoomRepository.save(commonChatRoom);
 
+            Set<ChatRoom> senderChatRooms = sender.getChatRooms();
+            senderChatRooms.add(commonChatRoom);
+            sender.setChatRooms(senderChatRooms);
+            userRepository.save(sender);
+
+            Set<ChatRoom> recipientChatRooms = recipient.getChatRooms();
+            recipientChatRooms.add(commonChatRoom);
+            recipient.setChatRooms(recipientChatRooms);
+            userRepository.save(recipient);
+
         } else {
             commonChatRoom = chatRoomRepository.findOne(
                     commonChatRooms.iterator().next());
@@ -78,16 +89,6 @@ public class ChatServiceImpl implements ChatService{
         List<Message> messages = commonChatRoom.getMessages();
         messages.add(message);
         commonChatRoom.setMessages(messages);
-        commonChatRoom = chatRoomRepository.save(commonChatRoom);
-
-        Set<ChatRoom> senderChatRooms = sender.getChatRooms();
-        senderChatRooms.add(commonChatRoom);
-        sender.setChatRooms(senderChatRooms);
-        userRepository.save(sender);
-
-        Set<ChatRoom> recipientChatRooms = recipient.getChatRooms();
-        recipientChatRooms.add(commonChatRoom);
-        recipient.setChatRooms(recipientChatRooms);
-        userRepository.save(recipient);
+        chatRoomRepository.save(commonChatRoom);
     }
 }
