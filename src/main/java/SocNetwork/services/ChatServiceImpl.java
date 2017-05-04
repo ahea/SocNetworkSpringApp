@@ -56,9 +56,10 @@ public class ChatServiceImpl implements ChatService{
     public List getMessagesWithUser(User whoRequests, User withWhom, int offset, int count)
             throws UserNotFoundException{
         if (whoRequests == null ||withWhom == null) throw new UserNotFoundException("User not found");
-        Collection<Long> commonRoom = chatRoomRepository.findCommon(whoRequests.getId(), withWhom.getId());
-        if (commonRoom.size() == 0) return null;
-        ChatRoom room = chatRoomRepository.findOne(commonRoom.iterator().next());
+        Long commonRoomId = chatRoomRepository.findCommon(whoRequests.getId(), withWhom.getId());
+        System.out.println(commonRoomId);
+        if (commonRoomId == null) return null;
+        ChatRoom room = chatRoomRepository.findOne(commonRoomId);
         List<Message> messages = room.getMessages();
         List<Message> result = new ArrayList<>();
         for (int index = offset; index < messages.size() && count > 0; index++){
@@ -72,10 +73,10 @@ public class ChatServiceImpl implements ChatService{
     public void sendMessage(User sender, User recipient, Message message)
             throws UserNotFoundException{
         if (sender == null || recipient == null) throw new UserNotFoundException("User not found");
-        Collection<Long> commonChatRooms = chatRoomRepository.findCommon(
-                sender.getId(), recipient.getId());
+        Long commonChatRoomId = chatRoomRepository.findCommon(sender.getId(), recipient.getId());
+        System.out.println(commonChatRoomId);
         ChatRoom commonChatRoom;
-        if (commonChatRooms.isEmpty()) {
+        if (commonChatRoomId == null) {
 
             commonChatRoom = new ChatRoom();
             commonChatRoom = chatRoomRepository.save(commonChatRoom);
@@ -91,8 +92,7 @@ public class ChatServiceImpl implements ChatService{
             userRepository.save(recipient);
 
         } else {
-            commonChatRoom = chatRoomRepository.findOne(
-                    commonChatRooms.iterator().next());
+            commonChatRoom = chatRoomRepository.findOne(commonChatRoomId);
         }
 
         message.setSenderId(sender.getId());
