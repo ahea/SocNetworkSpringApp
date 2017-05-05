@@ -2,13 +2,13 @@ package SocNetwork.models.nodeEntities;
 
 import SocNetwork.models.enums.Country;
 import SocNetwork.models.enums.Gender;
+import SocNetwork.models.enums.LanguageLevel;
+import SocNetwork.models.enums.LanguageName;
 import SocNetwork.models.relationshipEntities.UserHasLanguage;
-import org.neo4j.ogm.annotation.GraphId;
-import org.neo4j.ogm.annotation.NodeEntity;
-import org.neo4j.ogm.annotation.Property;
-import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.*;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -49,6 +49,9 @@ public class User {
     private boolean online;
 
     private Set<UserHasLanguage> hasLanguage = new HashSet<>();
+
+    @Transient
+    private Map<LanguageName, LanguageLevel> languages;
 
     @Relationship(type="IN_CHATROOM", direction=Relationship.OUTGOING)
     private Set<ChatRoom> chatRooms = new HashSet<>();
@@ -148,6 +151,14 @@ public class User {
 
     public void setHasLanguage(Set<UserHasLanguage> hasLanguage) {
         this.hasLanguage = hasLanguage;
+    }
+
+    public Map<LanguageName, LanguageLevel> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(Map<LanguageName, LanguageLevel> languages) {
+        this.languages = languages;
     }
 
     public Set<ChatRoom> getChatRooms() {

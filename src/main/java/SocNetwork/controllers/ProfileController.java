@@ -1,8 +1,11 @@
 package SocNetwork.controllers;
 
 import SocNetwork.exceptions.UserNotFoundException;
+import SocNetwork.models.enums.LanguageLevel;
+import SocNetwork.models.enums.LanguageName;
 import SocNetwork.models.nodeEntities.User;
 import SocNetwork.models.enums.ServerResponse;
+import SocNetwork.services.LanguageService;
 import SocNetwork.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -22,27 +26,40 @@ public class ProfileController {
 
     private UserService userService;
 
+    private LanguageService languageService;
+
     @Autowired
     public void setUserService(UserService userService){
         this.userService = userService;
     }
 
+    @Autowired
+    public void setLanguageService(LanguageService languageService){
+        this.languageService = languageService;
+    }
+
     @RequestMapping(value = "/api/profile/me", method = RequestMethod.GET)
     public User getMyProfile(Principal principal) throws UserNotFoundException{
         String email = principal.getName();
-        return userService.getUserByEmail(email).hideRelationships();
+        User user = userService.getUserByEmail(email).hideRelationships();
+        user.setLanguages(languageService.getLanguages(user));
+        return user;
     }
 
     @RequestMapping(value = "/api/profile/{id}", method = RequestMethod.GET)
     public User getProfile(@PathVariable long id) throws UserNotFoundException {
-        return userService.getUserById(id).hideCredentials().hideRelationships();
+        User user = userService.getUserById(id).hideCredentials().hideRelationships();
+        user.setLanguages(languageService.getLanguages(user));
+        return user;
     }
 
     @RequestMapping(value = "/api/profile/edit", method = RequestMethod.POST)
-    public ResponseEntity<Integer> updateProfile(@RequestBody User updatedUser, Principal principal)
+    public ResponseEntity<Integer> updateProfile(@RequestBody User updatedUser,
+                                                 Principal principal)
             throws UserNotFoundException{
         String email = principal.getName();
         User user = userService.getUserByEmail(email);
+        languageService.updateLanguages(user, updatedUser.getLanguages());
         userService.updateUser(user, updatedUser);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
