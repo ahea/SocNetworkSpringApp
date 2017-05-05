@@ -47,6 +47,9 @@ public class ChatServiceImpl implements ChatService{
             //next line is needed because user was loaded with depth = 1
             room = chatRoomRepository.findOne(room.getId());
             List<Message> messages = room.getMessages();
+
+            if (messages.size() > 1) Collections.swap(messages, 0, 1);
+
             result.add(messages.get(messages.size() - 1));
         }
         return result;
@@ -61,6 +64,9 @@ public class ChatServiceImpl implements ChatService{
         if (commonRoomId == null) return null;
         ChatRoom room = chatRoomRepository.findOne(commonRoomId);
         List<Message> messages = room.getMessages();
+
+        if (messages.size() > 1) Collections.swap(messages, 0, 1);
+
         List<Message> result = new ArrayList<>();
         for (int index = offset; index < messages.size() && count > 0; index++){
             result.add(messages.get(index));
