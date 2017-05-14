@@ -56,7 +56,7 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-    public List getMessagesWithUser(User whoRequests, User withWhom, int offset, int count)
+    public List getMessagesWithUser(User whoRequests, User withWhom, Integer offset, Integer count)
             throws UserNotFoundException{
         if (whoRequests == null ||withWhom == null) throw new UserNotFoundException("User not found");
         Long commonRoomId = chatRoomRepository.findCommon(whoRequests.getId(), withWhom.getId());

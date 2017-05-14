@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface SearchService {
 
-    List<User> searchUsersByParams(SearchRequestParams params, int offset, int count);
+    List<User> searchUsersByParams(SearchRequestParams params, Integer offset, Integer count);
 
 }

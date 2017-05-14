@@ -33,7 +33,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<User> searchUsersByParams(SearchRequestParams params, int offset, int count){
+    public List<User> searchUsersByParams(SearchRequestParams params, Integer offset, Integer count){
         List<User> result = new ArrayList<>();
         Map<LanguageName, LanguageLevel> langParam = params.getLanguages();
         for (User user : userRepository.findAll()){

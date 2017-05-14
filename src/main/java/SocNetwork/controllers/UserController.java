@@ -52,8 +52,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/secured", method = RequestMethod.GET)
-    public String checkSecured(){
-        return "Authorization is ok";
+    public ResponseEntity checkSecured(){
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/api/free", method = RequestMethod.GET)

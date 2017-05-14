@@ -7,6 +7,7 @@ import SocNetwork.models.nodeEntities.User;
 import SocNetwork.services.ChatService;
 import SocNetwork.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class ChatController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "api/messages", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/messages", method = RequestMethod.GET)
     public ResponseEntity<List> getLastMessages(Principal principal)
             throws UserNotFoundException{
         String email = principal.getName();
@@ -43,10 +44,10 @@ public class ChatController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/messages/id={id}&offset={offset}&count={count}", method = RequestMethod.GET)
-    public ResponseEntity<List> getMessagesFromUser (@PathVariable long id,
-                                                     @PathVariable int offset,
-                                                     @PathVariable int count,
+    @RequestMapping(value = "/api/messages", method = RequestMethod.GET)
+    public ResponseEntity<List> getMessagesFromUser (@Param("id") Long id,
+                                                     @Param("offset") Integer offset,
+                                                     @Param("count") Integer count,
                                                      Principal principal)
             throws UserNotFoundException{
         String email = principal.getName();
@@ -56,7 +57,7 @@ public class ChatController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "api/messages/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/messages/{id}", method = RequestMethod.POST)
     public ResponseEntity<Integer> sendMessage(@RequestBody Message message,
                                                @PathVariable long id,
                                                Principal principal)
