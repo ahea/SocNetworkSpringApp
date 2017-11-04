@@ -2,12 +2,8 @@ package SocNetwork.services;
 
 import SocNetwork.exceptions.EmailExistsException;
 import SocNetwork.exceptions.UserNotFoundException;
-import SocNetwork.models.enums.LanguageLevel;
-import SocNetwork.models.enums.LanguageName;
-import SocNetwork.models.nodeEntities.Language;
 import SocNetwork.models.nodeEntities.Role;
 import SocNetwork.models.nodeEntities.User;
-import SocNetwork.models.relationshipEntities.UserHasLanguage;
 import SocNetwork.repositories.RoleRepository;
 import SocNetwork.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * Created by aleksei on 11.02.17.
- */
 
 @Service
 public class UserServiceImpl implements UserService {

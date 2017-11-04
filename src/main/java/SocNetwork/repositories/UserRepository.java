@@ -7,9 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 
-/**
- * Created by aleksei on 11.02.17.
- */
+
 public interface UserRepository extends GraphRepository<User> {
 
     User findByEmail(String email);

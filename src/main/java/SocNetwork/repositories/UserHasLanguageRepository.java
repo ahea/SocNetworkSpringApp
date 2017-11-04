@@ -10,9 +10,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Collection;
 
 
-/**
- * Created by aleksei on 05.05.17.
- */
 public interface UserHasLanguageRepository extends GraphRepository<UserHasLanguage> {
 
 

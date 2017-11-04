@@ -1,8 +1,6 @@
 package SocNetwork.models.enums;
 
-/**
- * Created by Artur on 4/22/17.
- */
+
 public enum LanguageName {
     NONE,
     AFRIKAANS,

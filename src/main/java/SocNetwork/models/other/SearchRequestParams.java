@@ -8,9 +8,7 @@ import SocNetwork.models.enums.LanguageName;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by aleksei on 06.05.17.
- */
+
 public class SearchRequestParams {
 
     private Map<LanguageName, LanguageLevel> languages = new HashMap<>();

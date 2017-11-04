@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-/**
- * Created by aleksei on 29.04.17.
- */
 
 @RestController
 public class ChatController {

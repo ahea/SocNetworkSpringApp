@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * Created by aleksei on 29.04.17.
- */
 
 @Service
 public class ChatServiceImpl implements ChatService{
@@ -65,7 +62,7 @@ public class ChatServiceImpl implements ChatService{
         ChatRoom room = chatRoomRepository.findOne(commonRoomId);
         List<Message> messages = room.getMessages();
 
-        if (messages.size() > 1) Collections.swap(messages, 0, 1);
+        if (messages.size() > 1) Collections.swap(messages, 0, 1); //wtf is that
 
         List<Message> result = new ArrayList<>();
         for (int index = offset; index < messages.size() && count > 0; index++){

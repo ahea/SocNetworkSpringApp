@@ -5,9 +5,7 @@ import SocNetwork.models.nodeEntities.User;
 import SocNetwork.models.enums.LanguageLevel;
 import org.neo4j.ogm.annotation.*;
 
-/**
- * Created by aleksei on 25.04.17.
- */
+
 @RelationshipEntity(type = "HAS_LANGUAGE")
 public class UserHasLanguage {
 

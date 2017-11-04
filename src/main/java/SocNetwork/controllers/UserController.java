@@ -16,9 +16,6 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import javax.servlet.http.HttpServletRequest;
 
 
-/**
- * Created by aleksei on 11.02.17.
- */
 @RestController
 public class UserController {
 

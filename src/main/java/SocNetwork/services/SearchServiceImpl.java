@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by aleksei on 06.05.17.
- */
 
 @Service
 public class SearchServiceImpl implements SearchService {

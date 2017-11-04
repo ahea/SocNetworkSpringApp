@@ -6,9 +6,6 @@ import SocNetwork.models.nodeEntities.User;
 
 import java.util.Set;
 
-/**
- * Created by aleksei on 11.02.17.
- */
 
 public interface UserService {
 

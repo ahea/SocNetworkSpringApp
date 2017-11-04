@@ -11,9 +11,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by aleksei on 11.02.17.
- */
 
 @NodeEntity
 public class User {

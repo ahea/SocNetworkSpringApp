@@ -6,9 +6,7 @@ import SocNetwork.models.nodeEntities.User;
 
 import java.util.List;
 
-/**
- * Created by aleksei on 29.04.17.
- */
+
 public interface ChatService {
 
     List getLastMessages(User user) throws UserNotFoundException;
@@ -18,6 +16,5 @@ public interface ChatService {
 
     void sendMessage(User sender, User recipient, Message message)
         throws UserNotFoundException;
-
 
 }

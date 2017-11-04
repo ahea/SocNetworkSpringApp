@@ -4,9 +4,6 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 
-/**
- * Created by aleksei on 11.02.17.
- */
 
 @NodeEntity
 public class Role {

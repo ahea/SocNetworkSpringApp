@@ -18,9 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by aleksei on 05.03.17.
- */
+
 @RestController
 public class ProfileController {
 

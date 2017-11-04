@@ -5,9 +5,6 @@ import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
 
-/**
- * Created by aleksei on 24.04.17.
- */
 
 @NodeEntity
 public class Language {

@@ -8,9 +8,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Created by aleksei on 11.02.17.
- */
 
 @Component
 public class RolesPreloader implements ApplicationListener<ContextRefreshedEvent> {

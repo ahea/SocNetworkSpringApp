@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-/**
- * Created by aleksei on 05.05.17.
- */
 
 @Service
 public class LanguageServiceImpl implements LanguageService {

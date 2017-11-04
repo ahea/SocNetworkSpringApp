@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by aleksei on 06.05.17.
- */
 
 @RestController
 public class SearchController {

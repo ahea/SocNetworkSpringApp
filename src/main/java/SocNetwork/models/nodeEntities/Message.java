@@ -8,9 +8,6 @@ import org.neo4j.ogm.annotation.Property;
 
 import java.util.Date;
 
-/**
- * Created by aleksei on 29.04.17.
- */
 
 @NodeEntity
 public class Message {

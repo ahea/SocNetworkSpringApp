@@ -6,9 +6,6 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.*;
 
-/**
- * Created by aleksei on 29.04.17.
- */
 
 @NodeEntity
 public class ChatRoom {

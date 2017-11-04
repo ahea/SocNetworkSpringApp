@@ -15,9 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/**
- * Created by aleksei on 17.02.17.
- */
+
 @Service
 @Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {

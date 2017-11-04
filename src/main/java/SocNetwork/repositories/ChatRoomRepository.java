@@ -7,9 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
 
-/**
- * Created by aleksei on 29.04.17.
- */
+
 public interface ChatRoomRepository extends GraphRepository<ChatRoom> {
 
     @Query("MATCH (a:User)-[r1:IN_CHATROOM]->(b:ChatRoom)<-[r2:IN_CHATROOM]-(c:User)\n" +
