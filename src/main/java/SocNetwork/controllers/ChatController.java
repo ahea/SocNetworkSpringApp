@@ -32,7 +32,7 @@ public class ChatController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/api/messages", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/lastMessages", method = RequestMethod.GET)
     public ResponseEntity<List> getLastMessages(Principal principal)
             throws UserNotFoundException{
         String email = principal.getName();
