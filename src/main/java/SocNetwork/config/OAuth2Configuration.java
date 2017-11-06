@@ -42,9 +42,9 @@ public class OAuth2Configuration {
         public void configure(HttpSecurity http) throws Exception {
             // @formatter:off
             http
-                    .authorizeRequests().antMatchers("/api/register").permitAll()
-                    .and()
-                    .authorizeRequests().antMatchers("/api/free").permitAll()
+                    .authorizeRequests().antMatchers(
+                            "/api/register",
+                            "/api/free").permitAll()
                     .and()
                     .authorizeRequests().regexMatchers("/api/profile/\\d*").permitAll()
                     .and()

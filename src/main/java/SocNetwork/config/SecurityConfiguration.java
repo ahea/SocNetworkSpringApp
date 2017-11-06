@@ -23,35 +23,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http
-                .authorizeRequests().antMatchers("/api/secured").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/profile/me").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/profile/edit").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/profile/{id}/add").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/profile/{id}/delete").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/profile/{id}/block").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/profile/{id}/unblock").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/profile/{id}/friends").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/profile/{id}/subscribers").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/profile/{id}/subscriptions").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/profile/blacklist").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/messages/{id}").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/lastMessages").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/messages").hasRole("USER")
-                .and()
-                .authorizeRequests().antMatchers("/api/search").hasRole("USER");
+                .authorizeRequests().antMatchers(
+                "/api/secured", //dummy request for testing security
+
+                "/api/profile/me",
+                "/api/profile/edit",
+                "/api/profile/{id}/add",
+                "/api/profile/{id}/add",
+                "/api/profile/{id}/delete",
+                "/api/profile/{id}/block",
+                "/api/profile/{id}/unblock",
+                "/api/profile/{id}/friends",
+                "/api/profile/{id}/subscribers",
+                "/api/profile/{id}/subscriptions",
+                "/api/profile/blacklist",
+
+                "/api/messages/{id}",
+                "/api/lastMessages",
+                "/api/messages",
+
+                "/api/search").hasRole("USER");
     }
 
     @Override
