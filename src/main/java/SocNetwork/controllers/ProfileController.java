@@ -37,54 +37,54 @@ public class ProfileController {
     }
 
     @RequestMapping(value = "/api/profile/me", method = RequestMethod.GET)
-    public User getMyProfile(Principal principal) throws UserNotFoundException{
+    public User getMyProfile(Principal principal) throws UserNotFoundException {
+
         String email = principal.getName();
-        User user = userService.getUserByEmail(email).hideRelationships();
-        user.setLanguages(languageService.getLanguages(user));
-        return user;
+        return userService.getUserByEmail(email)
+                .hideRelationships();
     }
 
     @RequestMapping(value = "/api/profile/{id}", method = RequestMethod.GET)
-    public User getProfile(@PathVariable long id) throws UserNotFoundException {
-        User user = userService.getUserById(id).hideCredentials().hideRelationships();
-        user.setLanguages(languageService.getLanguages(user));
-        return user;
+    public User getProfileById(@PathVariable long id) throws UserNotFoundException {
+
+        return userService.getUserById(id)
+                .hideCredentials()
+                .hideRelationships()
+                .hideChatRooms()
+                .hideBlackList();
     }
 
     @RequestMapping(value = "/api/profile/edit", method = RequestMethod.POST)
     public ResponseEntity<Integer> updateProfile(@RequestBody User updatedUser,
-                                                 Principal principal)
-            throws UserNotFoundException{
+                                                 Principal principal) throws UserNotFoundException {
+
         String email = principal.getName();
-        User user = userService.getUserByEmail(email);
-        languageService.updateLanguages(user, updatedUser.getLanguages());
-        userService.updateUser(user, updatedUser);
+        userService.updateUser(email, updatedUser);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/api/profile/{id}/add", method = RequestMethod.POST)
     public ResponseEntity<Integer> addFriend(@PathVariable long id, Principal principal)
-            throws UserNotFoundException{
+            throws UserNotFoundException {
+
         String email = principal.getName();
-        User whoAdds = userService.getUserByEmail(email);
-        User whoIsAdded = userService.getUserById(id);
-        userService.addToFriendList(whoAdds, whoIsAdded);
+        userService.addToFriendList(email, id);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/api/profile/{id}/delete", method = RequestMethod.POST)
     public ResponseEntity<Integer> removeFriend(@PathVariable long id, Principal principal)
-            throws UserNotFoundException{
+            throws UserNotFoundException {
+
         String email = principal.getName();
-        User whoRemoves = userService.getUserByEmail(email);
-        User whoIsRemoved = userService.getUserById(id);
-        userService.removeFromFriendList(whoRemoves, whoIsRemoved);
+        userService.removeFromFriendList(email, id);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/api/profile/{id}/block", method = RequestMethod.POST)
     public ResponseEntity<Integer> blockUser(@PathVariable long id, Principal principal)
-        throws UserNotFoundException{
+        throws UserNotFoundException {
+
         String email = principal.getName();
         User whoBlocks = userService.getUserByEmail(email);
         User whoIsBlocked = userService.getUserById(id);
@@ -95,6 +95,7 @@ public class ProfileController {
     @RequestMapping(value = "/api/profile/{id}/unblock", method = RequestMethod.POST)
     public ResponseEntity<Integer> unblockUser(@PathVariable long id, Principal principal)
             throws UserNotFoundException{
+
         String email = principal.getName();
         User whoUnblocks = userService.getUserByEmail(email);
         User whoIsUnblocked = userService.getUserById(id);
@@ -105,6 +106,7 @@ public class ProfileController {
     @RequestMapping(value = "/api/profile/{id}/friends", method = RequestMethod.GET)
     public ResponseEntity<List> getFriends(@PathVariable long id)
             throws UserNotFoundException {
+
         User user = userService.getUserById(id);
         Set set = userService.getFriends(user);
         return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
@@ -113,6 +115,7 @@ public class ProfileController {
     @RequestMapping(value = "/api/profile/{id}/subscribers", method = RequestMethod.GET)
     public ResponseEntity<List> getSubsribers(@PathVariable long id)
         throws UserNotFoundException{
+
         User user = userService.getUserById(id);
         Set set = userService.getSubscribers(user);
         return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
@@ -121,6 +124,7 @@ public class ProfileController {
     @RequestMapping(value = "/api/profile/{id}/subscriptions", method = RequestMethod.GET)
     public ResponseEntity<List> getSubscriptions(@PathVariable long id)
         throws UserNotFoundException{
+
         User user = userService.getUserById(id);
         Set set = userService.getSubscriptions(user);
         return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
@@ -129,6 +133,7 @@ public class ProfileController {
     @RequestMapping(value = "api/profile/blacklist", method = RequestMethod.GET)
     public ResponseEntity<List> getBlacklist(Principal principal)
             throws UserNotFoundException{
+
         String email = principal.getName();
         User user = userService.getUserByEmail(email);
         Set set = userService.getBlackList(user);

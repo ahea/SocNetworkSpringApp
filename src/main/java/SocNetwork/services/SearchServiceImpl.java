@@ -34,7 +34,7 @@ public class SearchServiceImpl implements SearchService {
         List<User> result = new ArrayList<>();
         Map<LanguageName, LanguageLevel> langParam = params.getLanguages();
         for (User user : userRepository.findAll()){
-            Map<LanguageName, LanguageLevel> userLangs = languageService.getLanguages(user);
+            Map<LanguageName, LanguageLevel> userLangs = languageService.getLanguagesByUserId(user.getId());
             user.setLanguages(userLangs);
             boolean hasLangParams = true;
             for (LanguageName langNameParam : langParam.keySet())

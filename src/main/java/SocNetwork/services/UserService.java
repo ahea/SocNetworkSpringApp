@@ -17,11 +17,11 @@ public interface UserService {
 
     void saveUser(User user) throws EmailExistsException;
 
-    void updateUser(User user, User updatedUser);
+    void updateUser(String email, User updatedUser) throws UserNotFoundException;
 
-    void addToFriendList(User whoAdds, User whoIsAdded) throws UserNotFoundException;
+    void addToFriendList(String whoAddsEmail, Long whoIsAddedId) throws UserNotFoundException;
 
-    void removeFromFriendList(User whoRemoves, User whoIsRemoved) throws UserNotFoundException;
+    void removeFromFriendList(String whoRemovesEmail, Long whoIsRemovedId) throws UserNotFoundException;
 
     void addToBlackList(User whoBlocks, User whoIsBlocked) throws UserNotFoundException;
 

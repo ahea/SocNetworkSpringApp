@@ -11,6 +11,6 @@ public interface LanguageService {
 
     void updateLanguages(User user, Map<LanguageName, LanguageLevel> languages);
 
-    Map<LanguageName, LanguageLevel> getLanguages(User user);
+    Map<LanguageName, LanguageLevel> getLanguagesByUserId(Long id);
 
 }

@@ -49,13 +49,13 @@ public class LanguageServiceImpl implements LanguageService {
     }
 
     @Override
-    public Map<LanguageName, LanguageLevel> getLanguages(User user){
+    public Map<LanguageName, LanguageLevel> getLanguagesByUserId(Long id){
         Collection<LanguageResult> result =
-                userHasLanguageRepository.findLanguagesAndLevels(user.getId());
-        HashMap<LanguageName, LanguageLevel> map = new HashMap<>();
+                userHasLanguageRepository.findLanguagesAndLevels(id);
+        HashMap<LanguageName, LanguageLevel> languagesMapping = new HashMap<>();
         for (LanguageResult element : result){
-            map.put(element.name, element.level);
+            languagesMapping.put(element.name, element.level);
         }
-        return map;
+        return languagesMapping;
     }
 }

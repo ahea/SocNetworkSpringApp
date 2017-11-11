@@ -5,6 +5,7 @@ import SocNetwork.models.enums.Gender;
 import SocNetwork.models.enums.LanguageLevel;
 import SocNetwork.models.enums.LanguageName;
 import SocNetwork.models.relationshipEntities.UserHasLanguage;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.neo4j.ogm.annotation.*;
 
 import java.util.HashSet;
@@ -45,6 +46,7 @@ public class User {
     @Property
     private boolean online;
 
+    @JsonIgnore
     private Set<UserHasLanguage> hasLanguage = new HashSet<>();
 
     @Transient
@@ -142,10 +144,12 @@ public class User {
         this.online = online;
     }
 
+    @JsonIgnore
     public Set<UserHasLanguage> getHasLanguage() {
         return hasLanguage;
     }
 
+    @JsonIgnore
     public void setHasLanguage(Set<UserHasLanguage> hasLanguage) {
         this.hasLanguage = hasLanguage;
     }
@@ -196,9 +200,20 @@ public class User {
         return this;
     }
 
-    public User hideCredentials(){
+    public User hideCredentials() {
         this.email = null;
         this.password = null;
         return this;
     }
+
+    public User hideChatRooms() {
+        this.chatRooms = null;
+        return this;
+    }
+
+    public User hideBlackList() {
+        this.blackList = null;
+        return this;
+    }
+
 }
