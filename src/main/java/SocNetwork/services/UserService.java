@@ -23,17 +23,17 @@ public interface UserService {
 
     void removeFromFriendList(String whoRemovesEmail, Long whoIsRemovedId) throws UserNotFoundException;
 
-    void addToBlackList(User whoBlocks, User whoIsBlocked) throws UserNotFoundException;
+    void addToBlackList(String whoBlocksEmail, Long whoIsBlockedId) throws UserNotFoundException;
 
-    void removeFromBlackList(User whoRemoves, User whoIsRemoved) throws UserNotFoundException;
+    void removeFromBlackList(String whoUnblocksEmail, Long whoIsUnblockedId) throws UserNotFoundException;
 
-    Set getFriends(User user) throws UserNotFoundException;
+    Set getFriendsById(Long id) throws UserNotFoundException;
 
-    Set getSubscribers(User user) throws UserNotFoundException;
+    Set getSubscribersById(Long id) throws UserNotFoundException;
 
-    Set getSubscriptions(User user) throws UserNotFoundException;
+    Set getSubscriptionsById(Long id) throws UserNotFoundException;
 
-    Set getBlackList(User user);
+    Set getBlackListByEmail(String email) throws UserNotFoundException;
 
     void deleteUserById(Long id);
 

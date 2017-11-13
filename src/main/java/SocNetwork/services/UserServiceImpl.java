@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByEmail(String email) throws UserNotFoundException{
+    public User getUserByEmail(String email) throws UserNotFoundException {
 
         User user = userRepository.findByEmail(email);
         if (user == null) {
@@ -128,89 +128,109 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addToBlackList(User whoBlocks, User whoIsBlocked)
+    public void addToBlackList(String whoBlocksEmail, Long whoIsBlockedId)
             throws UserNotFoundException {
 
-        if (whoBlocks == null)
-            throw new UserNotFoundException("User not found");
+        User whoBlocks = getUserByEmail(whoBlocksEmail);
+        User whoIsBlocked = getUserById(whoIsBlockedId);
+
         Set<User> blackList = whoBlocks.getBlackList();
-        if (blackList == null)
+        if (blackList == null) {
             blackList = new HashSet<>();
-        if (blackList.contains(whoIsBlocked))
-            return;
+        }
         blackList.add(whoIsBlocked);
         whoBlocks.setBlackList(blackList);
         userRepository.save(whoBlocks);
     }
 
     @Override
-    public void removeFromBlackList(User whoRemoves, User whoIsRemoved)
+    public void removeFromBlackList(String whoUnblocksEmail, Long whoIsUnblockedId)
             throws UserNotFoundException {
 
-        if (whoIsRemoved == null)
-            throw new UserNotFoundException("User not found");
-        Set<User> blackList = whoRemoves.getBlackList();
-        if (blackList == null || !blackList.contains(whoIsRemoved))
-            throw new UserNotFoundException("User is not in friendlist");
-        blackList.remove(whoIsRemoved);
-        whoRemoves.setBlackList(blackList);
-        userRepository.save(whoRemoves);
+        User whoUnblocks = getUserByEmail(whoUnblocksEmail);
+        User whoIsUnblocked = getUserById(whoIsUnblockedId);
+
+        Set<User> blacklist = whoUnblocks.getBlackList();
+        if (blacklist == null) {
+            return;
+        }
+        blacklist.remove(whoIsUnblocked);
+        whoUnblocks.setBlackList(blacklist);
+        userRepository.save(whoUnblocks);
     }
 
     @Override
-    public Set getFriends(User user) throws UserNotFoundException {
+    public Set getFriendsById(Long id) throws UserNotFoundException {
 
-        if (user == null)
-            throw new UserNotFoundException("User not found");
-        Set<User> set = user.getFriendList();
-        Set<User> result = new HashSet<>();
-        for (User friend  : set) {
+        User user = getUserById(id);
+
+        Set<User> friends = new HashSet<>();
+        for (User friend  : user.getFriendList()) {
             if (friend.getFriendList().contains(user)) {
-                result.add(friend.hideCredentials().hideRelationships());
+                friends.add(friend
+                        .hideCredentials()
+                        .hideRelationships()
+                        .hideChatRooms()
+                        .hideBlackList());
             }
         }
-        return result;
+        return friends;
     }
 
     @Override
-    public Set getSubscribers(User user) throws UserNotFoundException {
+    public Set getSubscribersById(Long id) throws UserNotFoundException {
 
-        if (user == null)
-            throw new UserNotFoundException("User not found");
-        Collection<User> incFriends = userRepository.getIncomingFriendsById(user.getId());
+        User user = getUserById(id);
+
         Set<User> friendList = user.getFriendList();
-        Set<User> result = new HashSet<>();
-        for (User friend : incFriends){
-            if (!friendList.contains(friend)) {
-                result.add(friend.hideCredentials().hideRelationships());
+        Collection<User> incFriends = userRepository.getIncomingFriendsById(user.getId());
+
+        Set<User> subscribers = new HashSet<>();
+        for (User incFriend : incFriends){
+            if (!friendList.contains(incFriend)) {
+                subscribers.add(incFriend
+                        .hideCredentials()
+                        .hideRelationships()
+                        .hideChatRooms()
+                        .hideBlackList());
             }
         }
-        return result;
+        return subscribers;
     }
 
     @Override
-    public Set getSubscriptions(User user) throws UserNotFoundException{
+    public Set getSubscriptionsById(Long id) throws UserNotFoundException{
 
-        if (user == null)
-            throw new UserNotFoundException("User not found");
-        Set<User> set = user.getFriendList();
-        Set<User> result = new HashSet<>();
-        for (User friend  : set) {
+        User user = getUserById(id);
+
+        Set<User> friendlist = user.getFriendList();
+        Set<User> subscriptions = new HashSet<>();
+        for (User friend  : friendlist) {
             if (!friend.getFriendList().contains(user)) {
-                result.add(friend.hideCredentials().hideRelationships());
+                subscriptions.add(friend
+                        .hideCredentials()
+                        .hideRelationships()
+                        .hideChatRooms()
+                        .hideBlackList());
             }
         }
-        return result;
+        return subscriptions;
     }
 
     @Override
-    public Set getBlackList(User user){
+    public Set getBlackListByEmail(String email) throws UserNotFoundException{
 
-        Set<User> set = user.getBlackList();
-        for (User blockedUser : set){
-            blockedUser.hideCredentials().hideRelationships();
+        User user = getUserByEmail(email);
+
+        Set<User> blacklist = user.getBlackList();
+        for (User blockedUser : blacklist) {
+            blockedUser
+                    .hideCredentials()
+                    .hideRelationships()
+                    .hideChatRooms()
+                    .hideBlackList();
         }
-        return set;
+        return blacklist;
     }
 
     @Override

@@ -86,9 +86,7 @@ public class ProfileController {
         throws UserNotFoundException {
 
         String email = principal.getName();
-        User whoBlocks = userService.getUserByEmail(email);
-        User whoIsBlocked = userService.getUserById(id);
-        userService.addToBlackList(whoBlocks, whoIsBlocked);
+        userService.addToBlackList(email, id);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
 
@@ -97,9 +95,7 @@ public class ProfileController {
             throws UserNotFoundException{
 
         String email = principal.getName();
-        User whoUnblocks = userService.getUserByEmail(email);
-        User whoIsUnblocked = userService.getUserById(id);
-        userService.removeFromBlackList(whoUnblocks, whoIsUnblocked);
+        userService.removeFromBlackList(email, id);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
 
@@ -107,27 +103,24 @@ public class ProfileController {
     public ResponseEntity<List> getFriends(@PathVariable long id)
             throws UserNotFoundException {
 
-        User user = userService.getUserById(id);
-        Set set = userService.getFriends(user);
-        return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
+        Set friends = userService.getFriendsById(id);
+        return new ResponseEntity<>(new ArrayList(friends), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/api/profile/{id}/subscribers", method = RequestMethod.GET)
     public ResponseEntity<List> getSubsribers(@PathVariable long id)
         throws UserNotFoundException{
 
-        User user = userService.getUserById(id);
-        Set set = userService.getSubscribers(user);
-        return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
+        Set subscribers = userService.getSubscribersById(id);
+        return new ResponseEntity<>(new ArrayList(subscribers), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/api/profile/{id}/subscriptions", method = RequestMethod.GET)
     public ResponseEntity<List> getSubscriptions(@PathVariable long id)
         throws UserNotFoundException{
 
-        User user = userService.getUserById(id);
-        Set set = userService.getSubscriptions(user);
-        return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
+        Set subscriptions = userService.getSubscriptionsById(id);
+        return new ResponseEntity<>(new ArrayList(subscriptions), HttpStatus.OK);
     }
 
     @RequestMapping(value = "api/profile/blacklist", method = RequestMethod.GET)
@@ -135,9 +128,8 @@ public class ProfileController {
             throws UserNotFoundException{
 
         String email = principal.getName();
-        User user = userService.getUserByEmail(email);
-        Set set = userService.getBlackList(user);
-        return new ResponseEntity<>(new ArrayList(set), HttpStatus.OK);
+        Set blacklist = userService.getBlackListByEmail(email);
+        return new ResponseEntity<>(new ArrayList(blacklist), HttpStatus.OK);
     }
 
 }
