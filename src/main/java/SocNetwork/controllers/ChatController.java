@@ -34,11 +34,10 @@ public class ChatController {
 
     @RequestMapping(value = "/api/lastMessages", method = RequestMethod.GET)
     public ResponseEntity<List> getLastMessages(Principal principal)
-            throws UserNotFoundException{
+            throws UserNotFoundException {
+
         String email = principal.getName();
-        User user = userService.getUserByEmail(email);
-        List list = chatService.getLastMessages(user);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(chatService.getLastMessagesByEmail(email), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/api/messages", method = RequestMethod.GET)
@@ -46,23 +45,20 @@ public class ChatController {
                                                      @Param("offset") Integer offset,
                                                      @Param("count") Integer count,
                                                      Principal principal)
-            throws UserNotFoundException{
+            throws UserNotFoundException {
+
         String email = principal.getName();
-        User whoRequests = userService.getUserByEmail(email);
-        User withWhom = userService.getUserById(id);
-        List list = chatService.getMessagesWithUser(whoRequests, withWhom, offset, count);
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        return new ResponseEntity<>(chatService.getMessagesWithUserByEmail(email, id, offset, count), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/api/messages/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/message", method = RequestMethod.POST)
     public ResponseEntity<Integer> sendMessage(@RequestBody Message message,
-                                               @PathVariable long id,
+                                               @Param("id") Long id,
                                                Principal principal)
-            throws UserNotFoundException{
+            throws UserNotFoundException {
+
         String email = principal.getName();
-        User sender = userService.getUserByEmail(email);
-        User recipient = userService.getUserById(id);
-        chatService.sendMessage(sender, recipient, message);
+        chatService.sendMessageByEmail(email, id, message);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
 

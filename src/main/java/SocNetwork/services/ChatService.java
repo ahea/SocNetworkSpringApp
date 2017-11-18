@@ -9,12 +9,11 @@ import java.util.List;
 
 public interface ChatService {
 
-    List getLastMessages(User user) throws UserNotFoundException;
+    List getLastMessagesByEmail(String email) throws UserNotFoundException;
 
-    List getMessagesWithUser(User whoReceives, User whoSent, Integer offset, Integer count)
+    List getMessagesWithUserByEmail(String whoRequestsEmail, Long withWhomId, Integer offset, Integer count)
             throws UserNotFoundException;
 
-    void sendMessage(User sender, User recipient, Message message)
-        throws UserNotFoundException;
+    void sendMessageByEmail(String senderEmail, Long recipientId, Message message) throws UserNotFoundException;
 
 }

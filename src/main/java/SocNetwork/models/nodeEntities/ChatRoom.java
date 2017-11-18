@@ -14,7 +14,7 @@ public class ChatRoom {
     private Long id;
 
     @Relationship(type = "HAS_MESSAGE", direction = Relationship.OUTGOING)
-    private List<Message> messages = new ArrayList<>();
+    private SortedSet<Message> messages = new TreeSet<>();
 
     public Long getId() {
         return id;
@@ -24,11 +24,11 @@ public class ChatRoom {
         this.id = id;
     }
 
-    public List<Message> getMessages() {
+    public SortedSet<Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<Message> messages) {
+    public void setMessages(SortedSet<Message> messages) {
         this.messages = messages;
     }
 }

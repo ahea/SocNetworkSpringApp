@@ -19,6 +19,7 @@ public class ChatServiceImpl implements ChatService{
     private ChatRoomRepository chatRoomRepository;
     private MessageRepository messageRepository;
     private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     public void setChatRoomRepository(ChatRoomRepository chatRoomRepository){
@@ -35,60 +36,74 @@ public class ChatServiceImpl implements ChatService{
         this.userRepository = userRepository;
     }
 
+    @Autowired
+    public void setUserService(UserService userService){
+        this.userService = userService;
+    }
+
     @Override
-    public List getLastMessages(User user) throws UserNotFoundException{
-        if (user == null) throw new UserNotFoundException("User not found");
+    public List getLastMessagesByEmail(String email) throws UserNotFoundException{
+
+        User user = userService.getUserByEmail(email);
+
         Set<ChatRoom> rooms = user.getChatRooms();
-        List<Message> result = new ArrayList<>();
+        ArrayList<Message> lastMessages = new ArrayList<>();
         for (ChatRoom room : rooms){
-            //next line is needed because user was loaded with depth = 1
+
+            // This will stay here for some time just as reminder for me (& you):
+            // Next line is needed because user was loaded with depth = 1
+            // "The default depth of 1 implies that related node or relationship entities will be loaded and have their properties set,
+            // but none of their related entities will be populated." <----- official docs
             room = chatRoomRepository.findOne(room.getId());
-            List<Message> messages = room.getMessages();
 
-            if (messages.size() > 1) Collections.swap(messages, 0, 1);
-
-            result.add(messages.get(messages.size() - 1));
+            SortedSet<Message> messages = room.getMessages();
+            lastMessages.add(messages.last());
         }
-        return result;
+        return lastMessages;
     }
 
     @Override
-    public List getMessagesWithUser(User whoRequests, User withWhom, Integer offset, Integer count)
-            throws UserNotFoundException{
-        if (whoRequests == null ||withWhom == null) throw new UserNotFoundException("User not found");
-        Long commonRoomId = chatRoomRepository.findCommon(whoRequests.getId(), withWhom.getId());
-        System.out.println(commonRoomId);
-        if (commonRoomId == null) return null;
+    public List getMessagesWithUserByEmail(String whoRequestsEmail, Long withWhomId, Integer offset, Integer count)
+            throws UserNotFoundException {
+
+        User user = userService.getUserByEmail(whoRequestsEmail);
+
+        Long commonRoomId = chatRoomRepository.findCommon(user.getId(), withWhomId);
+        if (commonRoomId == null) {
+            return null;
+        }
+
         ChatRoom room = chatRoomRepository.findOne(commonRoomId);
-        List<Message> messages = room.getMessages();
+        ArrayList<Message> messages = new ArrayList<>(room.getMessages());
 
-        if (messages.size() > 1) Collections.swap(messages, 0, 1); //wtf is that
-
-        List<Message> result = new ArrayList<>();
-        for (int index = offset; index < messages.size() && count > 0; index++){
-            result.add(messages.get(index));
-            count--;
-        }
-        return result;
+        return messages.subList(
+                Math.max(0, offset),
+                Math.min(offset + count, messages.size()));
     }
 
     @Override
-    public void sendMessage(User sender, User recipient, Message message)
-            throws UserNotFoundException{
-        if (sender == null || recipient == null) throw new UserNotFoundException("User not found");
-        Long commonChatRoomId = chatRoomRepository.findCommon(sender.getId(), recipient.getId());
-        System.out.println(commonChatRoomId);
+    public void sendMessageByEmail(String senderEmail, Long recipientId, Message message)
+            throws UserNotFoundException {
+
+        User sender = userService.getUserByEmail(senderEmail);
+        User recipient = userService.getUserById(recipientId);
+
+        Long commonChatRoomId = chatRoomRepository.findCommon(sender.getId(), recipientId);
         ChatRoom commonChatRoom;
+
         if (commonChatRoomId == null) {
 
+            //persist new chatroom
             commonChatRoom = new ChatRoom();
             commonChatRoom = chatRoomRepository.save(commonChatRoom);
 
+            //persist sender's reference to chatroom
             Set<ChatRoom> senderChatRooms = sender.getChatRooms();
             senderChatRooms.add(commonChatRoom);
             sender.setChatRooms(senderChatRooms);
             userRepository.save(sender);
 
+            //persist recipient's reference to chatroom
             Set<ChatRoom> recipientChatRooms = recipient.getChatRooms();
             recipientChatRooms.add(commonChatRoom);
             recipient.setChatRooms(recipientChatRooms);
@@ -98,12 +113,14 @@ public class ChatServiceImpl implements ChatService{
             commonChatRoom = chatRoomRepository.findOne(commonChatRoomId);
         }
 
+        //persist new message
         message.setSenderId(sender.getId());
         message.setRecipientId(recipient.getId());
         message.setDatetime(new Date());
         message = messageRepository.save(message);
 
-        List<Message> messages = commonChatRoom.getMessages();
+        //persist room's reference to message
+        SortedSet<Message> messages = commonChatRoom.getMessages();
         messages.add(message);
         commonChatRoom.setMessages(messages);
         chatRoomRepository.save(commonChatRoom);

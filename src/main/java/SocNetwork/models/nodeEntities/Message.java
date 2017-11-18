@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 @NodeEntity
-public class Message {
+public class Message implements Comparable<Message>{
 
     @GraphId
     private Long id;
@@ -87,5 +87,12 @@ public class Message {
 
     public void setType(ContentType type) {
         this.type = type;
+    }
+
+    @Override
+    public int compareTo(Message message) {
+
+        return  this.getDatetime().after(message.getDatetime())  ?  1 :
+                this.getDatetime().before(message.getDatetime()) ? -1 : 0;
     }
 }
