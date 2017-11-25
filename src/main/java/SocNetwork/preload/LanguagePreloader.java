@@ -8,12 +8,16 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class LanguagePreloader implements ApplicationListener<ContextRefreshedEvent> {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private LanguageRepository languageRepository;
+
 
     @Autowired
     public void setLanguageRepository(LanguageRepository languageRepository) {
@@ -22,8 +26,11 @@ public class LanguagePreloader implements ApplicationListener<ContextRefreshedEv
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        for (int i = 0; i < LanguageName.values().length; i++)
+        logger.info("Preload started: [Languages]");
+        for (int i = 0; i < LanguageName.values().length; i++) {
             createLanguage(LanguageName.values()[i]);
+        }
+        logger.info("Preload finished: [Languages]");
     }
 
     @Transactional
@@ -33,6 +40,9 @@ public class LanguagePreloader implements ApplicationListener<ContextRefreshedEv
             lang = new Language();
             lang.setLanguageName(name);
             languageRepository.save(lang);
+            logger.info("[Languages] Created: " + name);
+        } else {
+            logger.info("[Languages] Already exists: " + name);
         }
         return lang;
     }

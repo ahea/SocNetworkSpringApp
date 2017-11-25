@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="60">
+    <Properties>
+        <Property name="log-path">/home/aleksei/logs</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console-Appender" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                </pattern>>
+            </PatternLayout>
+        </Console>
+        <File name="General-Appender" fileName="${log-path}/application.log" >
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                </pattern>
+            </PatternLayout>
+        </File>
+        <File name="Preload-Appender" fileName="${log-path}/preload.log" >
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                </pattern>
+            </PatternLayout>
+        </File>
+        <File name="Controllers-Appender" fileName="${log-path}/controllers.log" >
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                </pattern>
+            </PatternLayout>
+        </File>
+        <File name="Services-Appender" fileName="${log-path}/services.log" >
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                </pattern>
+            </PatternLayout>
+        </File>
+        <File name="Requests-Appender" fileName="${log-path}/dbRequests.log" >
+            <PatternLayout>
+                <pattern>
+                    [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+                </pattern>
+            </PatternLayout>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Logger name="SocNetwork.preload" level="info">
+            <AppenderRef ref="Preload-Appender"/>
+        </Logger>
+        <Logger name="SocNetwork.controllers" level="info">
+            <AppenderRef ref="Controllers-Appender"/>
+        </Logger>
+        <Logger name="SocNetwork.services" level="info">
+            <AppenderRef ref="Services-Appender"/>
+        </Logger>
+        <Logger name="org.neo4j.ogm.drivers.http.request" level="info">
+            <AppenderRef ref="Requests-Appender"/>
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="General-Appender"/>
+            <AppenderRef ref="Console-Appender"/>
+        </Root>
+    </Loggers>
+</Configuration>
