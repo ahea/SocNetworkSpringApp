@@ -3,9 +3,10 @@ package SocNetwork.controllers;
 import SocNetwork.exceptions.UserNotFoundException;
 import SocNetwork.models.enums.ServerResponse;
 import SocNetwork.models.nodeEntities.Message;
-import SocNetwork.models.nodeEntities.User;
 import SocNetwork.services.ChatService;
 import SocNetwork.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ import java.util.List;
 
 @RestController
 public class ChatController {
+
+    private final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
     private ChatService chatService;
     private UserService userService;
@@ -37,6 +40,7 @@ public class ChatController {
             throws UserNotFoundException {
 
         String email = principal.getName();
+        logger.info("[Request] /api/lastMessages [Email] " + email);
         return new ResponseEntity<>(chatService.getLastMessagesByEmail(email), HttpStatus.OK);
     }
 
@@ -48,6 +52,8 @@ public class ChatController {
             throws UserNotFoundException {
 
         String email = principal.getName();
+        logger.info("[Request] /api/messages " +
+                "[Email] " + email + " [Id] " + id + " [Offset] " + offset + " [Count] " + count);
         return new ResponseEntity<>(chatService.getMessagesWithUserByEmail(email, id, offset, count), HttpStatus.OK);
     }
 
@@ -58,6 +64,7 @@ public class ChatController {
             throws UserNotFoundException {
 
         String email = principal.getName();
+        logger.info("[Request] /api/message [Email] " + email + " [Id] " + id);
         chatService.sendMessageByEmail(email, id, message);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }

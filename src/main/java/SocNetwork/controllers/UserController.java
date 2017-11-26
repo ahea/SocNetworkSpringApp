@@ -4,6 +4,8 @@ import SocNetwork.exceptions.EmailExistsException;
 import SocNetwork.models.nodeEntities.User;
 import SocNetwork.models.enums.ServerResponse;
 import SocNetwork.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 public class UserController {
+
+    Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private UserService userService;
     private TokenStore tokenStore;
@@ -34,13 +38,17 @@ public class UserController {
 
     @RequestMapping(value = "/api/register", method = RequestMethod.POST)
     public ResponseEntity<Integer> register(@RequestBody User user) throws EmailExistsException{
+
+        logger.info("[Request] /api/register [Email] " + user.getEmail());
         userService.saveUser(user);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/api/logout", method = RequestMethod.GET)
     public void logout(HttpServletRequest request){
+
         String authHeader = request.getHeader("Authorization");
+        logger.info("[Request] /api/logout [Auth Header] " + authHeader);
         if (authHeader != null){
             String tokenValue = authHeader.replace("Bearer", "").trim();
             OAuth2AccessToken accessToken = tokenStore.readAccessToken(tokenValue);
