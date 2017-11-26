@@ -7,6 +7,8 @@ import SocNetwork.models.nodeEntities.User;
 import SocNetwork.repositories.ChatRoomRepository;
 import SocNetwork.repositories.MessageRepository;
 import SocNetwork.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,9 @@ import java.util.*;
 
 @Service
 public class ChatServiceImpl implements ChatService{
+
+    private final Logger logger = LoggerFactory.getLogger(ChatServiceImpl.class);
+
 
     private ChatRoomRepository chatRoomRepository;
     private MessageRepository messageRepository;
@@ -59,6 +64,7 @@ public class ChatServiceImpl implements ChatService{
             SortedSet<Message> messages = room.getMessages();
             lastMessages.add(messages.last());
         }
+        logger.info("[getLastMessagesByEmail] [Email] " + email);
         return lastMessages;
     }
 
@@ -70,12 +76,16 @@ public class ChatServiceImpl implements ChatService{
 
         Long commonRoomId = chatRoomRepository.findCommon(user.getId(), withWhomId);
         if (commonRoomId == null) {
+            logger.info("[getMessagesWithUserByEmail] No messages found: [whoRequestsEmail] "
+                    + whoRequestsEmail + " [withWhomId] " + withWhomId);
             return null;
         }
 
         ChatRoom room = chatRoomRepository.findOne(commonRoomId);
         ArrayList<Message> messages = new ArrayList<>(room.getMessages());
 
+        logger.info("[getMessagesWithUserByEmail] Messages retrieved for [whoRequestsEmail] "
+                + whoRequestsEmail + " [withWhomId] " + withWhomId);
         return messages.subList(
                 Math.max(0, offset),
                 Math.min(offset + count, messages.size()));
@@ -93,24 +103,32 @@ public class ChatServiceImpl implements ChatService{
 
         if (commonChatRoomId == null) {
 
+            logger.info("[sendMessageByEmail] No chatRoom found for [senderId] " + sender.getId() + " [recipientId] " + recipientId);
+
             //persist new chatroom
             commonChatRoom = new ChatRoom();
             commonChatRoom = chatRoomRepository.save(commonChatRoom);
+            logger.info("[sendMessageByEmail] New chatRoom created: [chatRoomId]" + commonChatRoom.getId() +
+                    " [senderId] " + sender.getId() + " [recipientId] " + recipientId);
 
             //persist sender's reference to chatroom
             Set<ChatRoom> senderChatRooms = sender.getChatRooms();
             senderChatRooms.add(commonChatRoom);
             sender.setChatRooms(senderChatRooms);
             userRepository.save(sender);
+            logger.info("[sendMessageByEmail] new chatroom was added to sender's list: \n" + sender.toString());
 
             //persist recipient's reference to chatroom
             Set<ChatRoom> recipientChatRooms = recipient.getChatRooms();
             recipientChatRooms.add(commonChatRoom);
             recipient.setChatRooms(recipientChatRooms);
             userRepository.save(recipient);
+            logger.info("[sendMessageByEmail] new chatroom was added to recipient's list: \n" + recipient.toString());
 
         } else {
             commonChatRoom = chatRoomRepository.findOne(commonChatRoomId);
+            logger.info("[sendMessageByEmail] Common chatRooom found: [chatRoomId] " + commonChatRoom.getId() +
+                    " [senderId] " + sender.getId() + " [recipientId] " + recipientId);
         }
 
         //persist new message
@@ -118,12 +136,15 @@ public class ChatServiceImpl implements ChatService{
         message.setRecipientId(recipient.getId());
         message.setDatetime(new Date());
         message = messageRepository.save(message);
+        logger.info("[sendMessageByEmail] New message was saved [messageId]" + message.getId() + " [chatRoomId] " + commonChatRoom.getId() +
+                        " [senderId] " + sender.getId() + " [recipientId] " + recipientId);
 
         //persist room's reference to message
         SortedSet<Message> messages = commonChatRoom.getMessages();
         messages.add(message);
         commonChatRoom.setMessages(messages);
         chatRoomRepository.save(commonChatRoom);
+        logger.info("[sendMessageByEmail] Room's reference to message persisted: [chatRoomId] " + commonChatRoom.getId());
     }
 
 }

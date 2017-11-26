@@ -216,4 +216,21 @@ public class User {
         return this;
     }
 
+    @Override
+    public String toString() {
+
+        return  "<------- USER INFORMATION ------->" +
+                "\n[id]         " +  this.id +
+                "\n[name]       " +  this.name +
+                "\n[email]      " +  this.email +
+                "\n[photoLink]  " +  this.photoLink +
+                "\n[age]        " +  this.age +
+                "\n[country]    " +  this.country +
+                "\n[gender]     " +  this.gender +
+                "\n[about]      " +  this.about +
+                "\n[online]     " +  this.online +
+                "\n[languages]  " +  this.languages +
+                "\n<-------------------------------->";
+    }
+
 }
