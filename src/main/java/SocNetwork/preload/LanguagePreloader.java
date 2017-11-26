@@ -30,7 +30,7 @@ public class LanguagePreloader implements ApplicationListener<ContextRefreshedEv
         for (int i = 0; i < LanguageName.values().length; i++) {
             createLanguage(LanguageName.values()[i]);
         }
-        logger.info("Preload finished: [Languages]");
+        logger.info("Preload completed: [Languages]");
     }
 
     @Transactional
