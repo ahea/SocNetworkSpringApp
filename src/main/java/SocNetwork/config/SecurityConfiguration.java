@@ -39,7 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/api/profile/blacklist",
 
                 "/api/messages/{id}",
-                "/api/lastMessages",
                 "/api/messages",
 
                 "/api/search").hasRole("USER");

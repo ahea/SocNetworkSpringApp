@@ -20,7 +20,6 @@ public class ChatServiceImpl implements ChatService{
 
     private final Logger logger = LoggerFactory.getLogger(ChatServiceImpl.class);
 
-
     private ChatRoomRepository chatRoomRepository;
     private MessageRepository messageRepository;
     private UserRepository userRepository;
@@ -46,27 +45,10 @@ public class ChatServiceImpl implements ChatService{
         this.userService = userService;
     }
 
-    @Override
-    public List getLastMessagesByEmail(String email) throws UserNotFoundException{
-
-        User user = userService.getUserByEmail(email);
-
-        Set<ChatRoom> rooms = user.getChatRooms();
-        ArrayList<Message> lastMessages = new ArrayList<>();
-        for (ChatRoom room : rooms){
-
-            // This will stay here for some time just as reminder for me (& you):
-            // Next line is needed because user was loaded with depth = 1
-            // "The default depth of 1 implies that related node or relationship entities will be loaded and have their properties set,
-            // but none of their related entities will be populated." <----- official docs
-            room = chatRoomRepository.findOne(room.getId());
-
-            SortedSet<Message> messages = room.getMessages();
-            lastMessages.add(messages.last());
-        }
-        logger.info("[getLastMessagesByEmail] [Email] " + email);
-        return lastMessages;
-    }
+    // This will stay here for some time just as reminder for me (& you):
+    // Next line is needed because user was loaded with depth = 1
+    // "The default depth of 1 implies that related node or relationship entities will be loaded and have their properties set,
+    // but none of their related entities will be populated."
 
     @Override
     public List getMessagesWithUserByEmail(String whoRequestsEmail, Long withWhomId, Integer offset, Integer count)

@@ -35,15 +35,6 @@ public class ChatController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/api/lastMessages", method = RequestMethod.GET)
-    public ResponseEntity<List> getLastMessages(Principal principal)
-            throws UserNotFoundException {
-
-        String email = principal.getName();
-        logger.info("[Request] /api/lastMessages [Email] " + email);
-        return new ResponseEntity<>(chatService.getLastMessagesByEmail(email), HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/api/messages", method = RequestMethod.GET)
     public ResponseEntity<List> getMessagesFromUser (@Param("id") Long id,
                                                      @Param("offset") Integer offset,
