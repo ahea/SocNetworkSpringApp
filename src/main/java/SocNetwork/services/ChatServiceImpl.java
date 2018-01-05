@@ -115,7 +115,6 @@ public class ChatServiceImpl implements ChatService{
 
         //persist new message
         message.setSenderId(sender.getId());
-        message.setRecipientId(recipient.getId());
         message.setDatetime(new Date());
         message = messageRepository.save(message);
         logger.info("[sendMessageByEmail] New message was saved [messageId]" + message.getId() + " [chatRoomId] " + commonChatRoom.getId() +

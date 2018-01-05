@@ -1,7 +1,7 @@
 package SocNetwork.models.nodeEntities;
 
-import SocNetwork.models.enums.ContentType;
-import SocNetwork.models.enums.MessageStatus;
+import SocNetwork.models.enums.MessageDataType;
+import SocNetwork.models.enums.MessageType;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
@@ -10,7 +10,7 @@ import java.util.Date;
 
 
 @NodeEntity
-public class Message implements Comparable<Message>{
+public class Message implements Comparable<Message> {
 
     @GraphId
     private Long id;
@@ -19,19 +19,16 @@ public class Message implements Comparable<Message>{
     private Long senderId;
 
     @Property
-    private Long recipientId;
-
-    @Property
     private Date datetime;
 
     @Property
-    private MessageStatus status;
+    private MessageType messageType;
+
+    @Property
+    private MessageDataType messageDataType;
 
     @Property
     private byte[] data;
-
-    @Property
-    private ContentType type;
 
     public Long getId() {
         return id;
@@ -49,28 +46,12 @@ public class Message implements Comparable<Message>{
         this.senderId = senderId;
     }
 
-    public Long getRecipientId() {
-        return recipientId;
-    }
-
-    public void setRecipientId(Long recipientId) {
-        this.recipientId = recipientId;
-    }
-
     public Date getDatetime() {
         return datetime;
     }
 
     public void setDatetime(Date datetime) {
         this.datetime = datetime;
-    }
-
-    public MessageStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(MessageStatus status) {
-        this.status = status;
     }
 
     public byte[] getData() {
@@ -81,12 +62,20 @@ public class Message implements Comparable<Message>{
         this.data = data;
     }
 
-    public ContentType getType() {
-        return type;
+    public MessageType getMessageType() {
+        return messageType;
     }
 
-    public void setType(ContentType type) {
-        this.type = type;
+    public void setMessageType(MessageType messageType) {
+        this.messageType = messageType;
+    }
+
+    public MessageDataType getMessageDataType() {
+        return messageDataType;
+    }
+
+    public void setMessageDataType(MessageDataType messageDataType) {
+        this.messageDataType = messageDataType;
     }
 
     @Override
