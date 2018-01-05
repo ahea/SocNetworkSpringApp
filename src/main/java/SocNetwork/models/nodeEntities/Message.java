@@ -2,6 +2,8 @@ package SocNetwork.models.nodeEntities;
 
 import SocNetwork.models.enums.MessageDataType;
 import SocNetwork.models.enums.MessageType;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.neo4j.ogm.annotation.GraphId;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
@@ -10,6 +12,15 @@ import java.util.Date;
 
 
 @NodeEntity
+@JsonTypeInfo(
+        use =       JsonTypeInfo.Id.NAME,
+        include =   JsonTypeInfo.As.EXTERNAL_PROPERTY,
+        property =  "messageType",
+        visible =   true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Message.class, name = "Plain"),
+        @JsonSubTypes.Type(value = Comment.class, name = "Comment")
+})
 public class Message implements Comparable<Message> {
 
     @GraphId
