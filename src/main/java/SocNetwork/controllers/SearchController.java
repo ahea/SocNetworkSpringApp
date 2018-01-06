@@ -23,6 +23,7 @@ public class SearchController {
     public List searchByParams(@Param("offset") Integer offset,
                                @Param("count") Integer count,
                                @RequestBody SearchRequestParams searchRequestParams) {
+
         return searchService.searchUsersByParams(searchRequestParams, offset, count);
     }
 
