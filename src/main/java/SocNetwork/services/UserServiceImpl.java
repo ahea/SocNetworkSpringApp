@@ -6,7 +6,6 @@ import SocNetwork.models.nodeEntities.Role;
 import SocNetwork.models.nodeEntities.User;
 import SocNetwork.repositories.RoleRepository;
 import SocNetwork.repositories.UserRepository;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,13 +96,37 @@ public class UserServiceImpl implements UserService {
 
         User user = getUserByEmail(email);
         logger.info("[updateUser] Updating user: \n" + user.toString());
-        user.setName(       updatedUser.getName());
-        user.setAbout(      updatedUser.getAbout());
-        user.setAge(        updatedUser.getAge());
-        user.setCountry(    updatedUser.getCountry());
-        user.setGender(     updatedUser.getGender());
-        user.setPassword(   updatedUser.getPassword());
-        languageService.updateLanguages(user, updatedUser.getLanguages());
+
+        String name = updatedUser.getName();
+        if (name != null) {
+            user.setName(name.isEmpty() ? null : name);
+        }
+
+        String about = updatedUser.getAbout();
+        if (about != null) {
+            user.setAbout(about.isEmpty() ? null : about);
+        }
+
+        if (updatedUser.getAge() != null) {
+            user.setAge(updatedUser.getAge());
+        }
+
+        if (updatedUser.getCountry() != null) {
+            user.setCountry(updatedUser.getCountry());
+        }
+
+        if (updatedUser.getGender() != null) {
+            user.setGender(updatedUser.getGender());
+        }
+
+        String password = updatedUser.getPassword();
+        if (password != null) {
+            user.setPassword(password.isEmpty() ? null : password);
+        }
+
+        if (updatedUser.getLanguages() != null) {
+            languageService.updateLanguages(user, updatedUser.getLanguages());
+        }
         userRepository.save(user);
         logger.info("[updateUser] Updated user \n" + user.toString());
     }
