@@ -91,6 +91,7 @@ public class SearchServiceImpl implements SearchService {
 
         for (LanguageName langName : langParam.keySet()) {
             for (User speaker : userRepository.findSpeakers(langName.toString(), langParam.get(langName).toString())) {
+
                 Map<LanguageName, LanguageLevel> speakerLangs = languageService.getLanguagesByUserId(speaker.getId());
                 speaker.setLanguages(speakerLangs);
                 result.add(speaker

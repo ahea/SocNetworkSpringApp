@@ -22,7 +22,7 @@ public interface UserRepository extends GraphRepository<User> {
 
     @Query("MATCH (a:User)-[r:HAS_LANGUAGE]->(b:Language) " +
             "WHERE b.languageName = {languageName} " +
-            "AND   r.level = {languageLevel} " +
+            "AND   (r.level = {languageLevel} OR {languageLevel} = 'NONE') " +
             "RETURN a")
     Collection<User> findSpeakers(@Param("languageName")  String languageName,
                                   @Param("languageLevel") String languageLevel);
