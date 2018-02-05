@@ -35,7 +35,7 @@ public class ChatController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/api/messages", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/message", method = RequestMethod.GET)
     public ResponseEntity<List> getMessagesFromUser (@Param("id") Long id,
                                                      @Param("offset") Integer offset,
                                                      @Param("count") Integer count,
@@ -43,7 +43,7 @@ public class ChatController {
             throws UserNotFoundException {
 
         String email = principal.getName();
-        logger.info("[Request] /api/messages " +
+        logger.info("[Request] /api/message GET " +
                 "[Email] " + email + " [Id] " + id + " [Offset] " + offset + " [Count] " + count);
         return new ResponseEntity<>(chatService.getMessagesWithUserByEmail(email, id, offset, count), HttpStatus.OK);
     }
@@ -55,7 +55,7 @@ public class ChatController {
             throws UserNotFoundException {
 
         String email = principal.getName();
-        logger.info("[Request] /api/message [Email] " + email + " [Id] " + id);
+        logger.info("[Request] /api/message POST [Email] " + email + " [Id] " + id);
         chatService.sendMessageByEmail(email, id, message);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
     }

@@ -65,12 +65,19 @@ public class ChatServiceImpl implements ChatService{
 
         ChatRoom room = chatRoomRepository.findOne(commonRoomId);
         ArrayList<Message> messages = new ArrayList<>(room.getMessages());
-
         logger.info("[getMessagesWithUserByEmail] Messages retrieved for [whoRequestsEmail] "
                 + whoRequestsEmail + " [withWhomId] " + withWhomId);
-        return messages.subList(
-                Math.max(0, offset),
-                Math.min(offset + count, messages.size()));
+
+        return offset == null || count == null ?
+
+                messages.subList(
+                        Math.max(0, messages.size() - 20),
+                        messages.size()
+                ) :
+                messages.subList(
+                        Math.max(0, offset),
+                        Math.min(offset + count, messages.size())
+                );
     }
 
     @Override
