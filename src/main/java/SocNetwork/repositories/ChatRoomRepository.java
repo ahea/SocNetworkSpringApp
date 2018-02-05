@@ -20,4 +20,9 @@ public interface ChatRoomRepository extends GraphRepository<ChatRoom> {
             "RETURN id(e)")
     Long findCommon (@Param("id1") Long id1, @Param("id2") Long id2);
 
+
+    @Query ("MATCH (a:User)-[r1:IN_CHATROOM]->(b:ChatRoom) " +
+            "WHERE id(b) = {roomId} " +
+            "RETURN id(a)")
+    Collection<Long> findParticipantsIds(@Param("roomId") Long roomId);
 }

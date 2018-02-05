@@ -5,6 +5,7 @@ import SocNetwork.models.nodeEntities.Message;
 import SocNetwork.models.nodeEntities.User;
 
 import java.util.List;
+import java.util.Map;
 
 
 public interface ChatService {
@@ -14,4 +15,5 @@ public interface ChatService {
 
     void sendMessageByEmail(String senderEmail, Long recipientId, Message message) throws UserNotFoundException;
 
+    Map getLastMessagesByEmail(String email) throws UserNotFoundException;
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -58,6 +59,15 @@ public class ChatController {
         logger.info("[Request] /api/message POST [Email] " + email + " [Id] " + id);
         chatService.sendMessageByEmail(email, id, message);
         return new ResponseEntity<>(ServerResponse.SUCCESS.ordinal(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/api/conversations", method = RequestMethod.GET)
+    public ResponseEntity<Map> getLastMessages(Principal principal)
+            throws UserNotFoundException {
+
+        String email = principal.getName();
+        logger.info("[Request] /api/lastMessages [Email] " + email);
+        return new ResponseEntity<>(chatService.getLastMessagesByEmail(email), HttpStatus.OK);
     }
 
 }
